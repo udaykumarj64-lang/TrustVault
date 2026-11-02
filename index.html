@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVault | Secure Documents</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <header class="brand">
+      <div class="logo">🔐</div>
+      <div>
+        <h1>TrustVault</h1>
+        <p>Secure Document Sharing</p>
+      </div>
+    </header>
+
+    <section id="authSection" class="panel auth-panel">
+      <h2 id="authHeading">Welcome to TrustVault</h2>
+      <p class="muted">Your documents. Your permissions. Your security.</p>
+
+      <div class="tabs">
+        <button id="loginTab" class="active" type="button">Login</button>
+        <button id="registerTab" type="button">Register</button>
+      </div>
+
+      <form id="authForm">
+        <label id="nameLabel" for="fullName" hidden>Full Name</label>
+        <input id="fullName" type="text" placeholder="Full name" hidden>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Enter email" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter password" minlength="6" required>
+
+        <button class="primary full" id="submitBtn" type="submit">Login</button>
+      </form>
+      <p id="authMessage" class="message"></p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <header class="topbar panel">
+        <div>
+          <h2>Dashboard</h2>
+          <p id="welcomeText" class="muted"></p>
+        </div>
+        <button id="logoutBtn" class="danger" type="button">Logout</button>
+      </header>
+
+      <nav class="nav panel">
+        <button class="nav-btn active" data-view="overview">Overview</button>
+        <button class="nav-btn" data-view="documents">Documents</button>
+        <button class="nav-btn" data-view="activity">Activity Logs</button>
+      </nav>
+
+      <section id="overviewView" class="view">
+        <div class="stats">
+          <article class="panel stat">
+            <span>My Role</span>
+            <strong id="userRole">Viewer</strong>
+          </article>
+          <article class="panel stat">
+            <span>Account</span>
+            <strong id="userEmail">-</strong>
+          </article>
+          <article class="panel stat">
+            <span>Visible Documents</span>
+            <strong id="documentCount">0</strong>
+          </article>
+        </div>
+
+        <article class="panel">
+          <h2>Secure Workspace</h2>
+          <p class="muted">Manage your documents in one place.</p>
+          <div class="notice">🔒 Private document storage enabled.</div>
+        </article>
+      </section>
+
+      <section id="documentsView" class="view" hidden>
+        <div class="section-heading">
+          <div>
+            <h2>Documents</h2>
+            <p class="muted">Upload and manage your files.</p>
+          </div>
+          <button id="openUploadBtn" class="primary">+ Upload</button>
+        </div>
+
+        <div class="toolbar panel">
+          <input id="searchInput" type="search" placeholder="Search documents">
+          <select id="categoryFilter">
+            <option value="">All categories</option>
+            <option>General</option>
+            <option>Academic</option>
+            <option>Business</option>
+            <option>Personal</option>
+          </select>
+        </div>
+
+        <div id="documentsList" class="document-grid"></div>
+      </section>
+
+      <section id="activityView" class="view" hidden>
+        <article class="panel">
+          <h2>Activity Logs</h2>
+          <div id="activityList" class="activity-list"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="uploadDialog" class="dialog">
+    <form id="uploadForm">
+      <div class="section-heading">
+        <h2>Upload Document</h2>
+        <button id="closeUploadBtn" type="button">✕</button>
+      </div>
+
+      <label for="docTitle">Document Title</label>
+      <input id="docTitle" type="text" placeholder="Document name">
+
+      <label for="docCategory">Category</label>
+      <select id="docCategory">
+        <option>General</option>
+        <option>Academic</option>
+        <option>Business</option>
+        <option>Personal</option>
+      </select>
+
+      <label for="docFile">Select File</label>
+      <input id="docFile" type="file" required>
+
+      <button class="primary full" type="submit">Upload Securely</button>
+      <p id="uploadMessage" class="message"></p>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+</body>
+</html>

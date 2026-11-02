@@ -1,0 +1,30 @@
+
+# TrustVault
+
+Secure document sharing with authentication, role-based access, private storage and audit logs.
+
+## Technology
+- HTML, CSS, JavaScript
+- Supabase Authentication
+- Supabase PostgreSQL
+- Supabase Private Storage
+
+## Local setup
+1. Create a Supabase project.
+2. Create the required database tables and Row Level Security policies.
+3. Create a private Storage bucket named `trustvault-documents`.
+4. Add your Supabase Project URL and Publishable Key to `script.js`.
+5. Open `index.html` with VS Code Live Server.
+
+## Security
+The browser uses only the Publishable Key. Never expose a Supabase Secret or service-role key.
+All document and Storage access must be enforced with database and Storage RLS policies.
+
+## Production checklist
+- Verify RLS for every table.
+- Verify private Storage access.
+- Test with separate owner, viewer and admin accounts.
+- Verify immediate access revocation.
+- Verify append-only audit logs.
+- Run automated authorization tests.
+- Configure production Site URL and redirect URLs.
