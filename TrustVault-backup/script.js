@@ -380,7 +380,10 @@ async function initializeApp() {
   $("registerTab").addEventListener("click", () => setAuthMode("register"));
   $("authForm").addEventListener("submit", handleAuth);
   $("logoutBtn").addEventListener("click", logout);
-  $("openUploadBtn").addEventListener("click", () => $("uploadDialog").showModal());
+$("openUploadBtn").addEventListener("click", () => {
+    alert("Upload button clicked successfully!");
+    $("uploadDialog").showModal();
+});
   $("closeUploadBtn").addEventListener("click", () => $("uploadDialog").close());
   $("uploadForm").addEventListener("submit", uploadFile);
   $("searchInput").addEventListener("input", renderDocuments);

@@ -2,143 +2,1877 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrustVault | Secure Documents</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustVault | Secure Document Management</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #080f1e;
+    color: #eef4ff;
+    min-height: 100vh;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 9px;
+    padding: 11px 16px;
+    background: linear-gradient(120deg,#65a8ff,#8b7cff);
+    color: #071225;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: .88;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: #091426;
+    border: 1px solid #263754;
+    color: white;
+    border-radius: 9px;
+    outline: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.muted {
+    color: #91a3bf;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 30px;
+    background: #101b30;
+    border: 1px solid #263754;
+    border-radius: 20px;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #65a8ff;
+    margin-bottom: 25px;
+}
+
+.auth-card h1 {
+    margin-bottom: 8px;
+}
+
+.field {
+    margin-top: 18px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b6c5dc;
+}
+
+.auth-card form button {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.link-button {
+    background: transparent;
+    color: #8dbdff;
+    padding: 5px;
+}
+
+.dashboard {
+    max-width: 1200px;
+    margin: auto;
+    padding: 22px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 1px solid #263754;
+    padding-bottom: 20px;
+}
+
+.brand {
+    font-size: 25px;
+    font-weight: bold;
+    color: #65a8ff;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.sidebar, .panel, .stat {
+    background: #101b30;
+    border: 1px solid #263754;
+    border-radius: 15px;
+}
+
+.sidebar {
+    padding: 12px;
+    height: max-content;
+}
+
+.nav-btn {
+    width: 100%;
+    margin-bottom: 8px;
+    text-align: left;
+    background: transparent;
+    color: #b6c5dc;
+}
+
+.nav-btn.active, .nav-btn:hover {
+    background: #1b2d4b;
+    color: white;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    padding: 20px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 27px;
+    margin-top: 8px;
+}
+
+.panel {
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 13px;
+}
+
+.doc-card {
+    background: #091426;
+    border: 1px solid #263754;
+    border-radius: 12px;
+    padding: 15px;
+    overflow-wrap: anywhere;
+}
+
+.doc-card h3 {
+    margin-bottom: 9px;
+}
+
+.doc-meta {
+    color: #91a3bf;
+    font-size: 12px;
+    margin-bottom: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    font-size: 12px;
+    padding: 8px 10px;
+}
+
+.secondary {
+    background: #1b2b47;
+    color: white;
+    border: 1px solid #263754;
+}
+
+.danger {
+    background: #482334;
+    color: #ffdbe1;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.toolbar input {
+    flex: 1;
+}
+
+.empty {
+    color: #91a3bf;
+    text-align: center;
+    padding: 30px;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: #000b;
+    display: grid;
+    place-items: center;
+    padding: 15px;
+    z-index: 5;
+}
+
+.modal-card {
+    background: #101b30;
+    border: 1px solid #263754;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    padding: 22px;
+}
+
+.modal-card h2 {
+    margin-bottom: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #1b2d4b;
+    border: 1px solid #395579;
+    border-radius: 10px;
+    padding: 14px;
+    max-width: 90%;
+    z-index: 10;
+}
+
+@media(max-width:750px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .nav-btn {
+        min-width: 120px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
 </head>
+
 <body>
-  <main class="container">
-    <header class="brand">
-      <div class="logo">🔐</div>
-      <div>
-        <h1>TrustVault</h1>
-        <p>Secure Document Sharing</p>
-      </div>
+
+<!-- LOGIN AND REGISTRATION -->
+
+<section id="authSection" class="auth-container">
+    <div class="auth-card">
+
+        <div class="logo">⬡ TrustVault</div>
+
+        <h1 id="authTitle">Welcome Back</h1>
+        <p class="muted" id="authSubtitle">
+            Sign in to your secure workspace.
+        </p>
+
+        <form id="authForm">
+
+            <div class="field hidden" id="nameField">
+                <label>Full Name</label>
+                <input id="fullName" placeholder="Enter your name">
+            </div>
+
+            <div class="field">
+                <label>Email Address</label>
+                <input id="email" type="email"
+                       placeholder="Enter email" required>
+            </div>
+
+            <div class="field">
+                <label>Password</label>
+                <input id="password" type="password"
+                       placeholder="Enter password" required>
+            </div>
+
+            <div class="field hidden" id="confirmField">
+                <label>Confirm New Password</label>
+                <input id="confirmPassword" type="password"
+                       placeholder="Confirm password">
+            </div>
+
+            <button id="authButton" type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div class="auth-links">
+            <button class="link-button" id="modeButton" type="button">
+                Create Account
+            </button>
+
+            <button class="link-button" id="forgotButton" type="button">
+                Forgot Password?
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- MAIN DASHBOARD -->
+
+<section id="dashboard" class="dashboard hidden">
+
+    <header class="topbar">
+
+        <div class="brand">⬡ TrustVault</div>
+
+        <div class="user-info">
+            <div>
+                <strong id="userName">User</strong>
+                <div class="muted" id="userEmail"></div>
+                <small id="userRole"></small>
+            </div>
+
+            <button class="secondary" id="logoutButton">
+                Logout
+            </button>
+        </div>
+
     </header>
 
-    <section id="authSection" class="panel auth-panel">
-      <h2 id="authHeading">Welcome to TrustVault</h2>
-      <p class="muted">Your documents. Your permissions. Your security.</p>
 
-      <div class="tabs">
-        <button id="loginTab" class="active" type="button">Login</button>
-        <button id="registerTab" type="button">Register</button>
-      </div>
+    <div class="layout">
 
-      <form id="authForm">
-        <label id="nameLabel" for="fullName" hidden>Full Name</label>
-        <input id="fullName" type="text" placeholder="Full name" hidden>
+        <!-- SIDEBAR -->
 
-        <label for="email">Email</label>
-        <input id="email" type="email" placeholder="Enter email" required>
+        <aside class="sidebar">
 
-        <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Enter password" minlength="6" required>
+            <button class="nav-btn active" data-page="overview">
+                Dashboard
+            </button>
 
-        <button class="primary full" id="submitBtn" type="submit">Login</button>
-      </form>
-      <p id="authMessage" class="message"></p>
-    </section>
+            <button class="nav-btn" data-page="documents">
+                Documents
+            </button>
 
-    <section id="dashboard" hidden>
-      <header class="topbar panel">
-        <div>
-          <h2>Dashboard</h2>
-          <p id="welcomeText" class="muted"></p>
-        </div>
-        <button id="logoutBtn" class="danger" type="button">Logout</button>
-      </header>
+            <button class="nav-btn" data-page="shared">
+                Shared With Me
+            </button>
 
-      <nav class="nav panel">
-        <button class="nav-btn active" data-view="overview">Overview</button>
-        <button class="nav-btn" data-view="documents">Documents</button>
-        <button class="nav-btn" data-view="activity">Activity Logs</button>
-      </nav>
+            <button class="nav-btn" data-page="activity">
+                Activity Logs
+            </button>
 
-      <section id="overviewView" class="view">
-        <div class="stats">
-          <article class="panel stat">
-            <span>My Role</span>
-            <strong id="userRole">Viewer</strong>
-          </article>
-          <article class="panel stat">
-            <span>Account</span>
-            <strong id="userEmail">-</strong>
-          </article>
-          <article class="panel stat">
-            <span>Visible Documents</span>
-            <strong id="documentCount">0</strong>
-          </article>
-        </div>
+            <button class="nav-btn hidden" id="adminNav"
+                    data-page="users">
+                User Management
+            </button>
 
-        <article class="panel">
-          <h2>Secure Workspace</h2>
-          <p class="muted">Manage your documents in one place.</p>
-          <div class="notice">🔒 Private document storage enabled.</div>
-        </article>
-      </section>
+        </aside>
 
-      <section id="documentsView" class="view" hidden>
-        <div class="section-heading">
-          <div>
-            <h2>Documents</h2>
-            <p class="muted">Upload and manage your files.</p>
-          </div>
-          <button id="openUploadBtn" class="primary" type="button">+ Upload</button>
-        </div>
 
-        <div class="toolbar panel">
-          <input id="searchInput" type="search" placeholder="Search documents">
-          <select id="categoryFilter">
-            <option value="">All categories</option>
-            <option>General</option>
-            <option>Academic</option>
-            <option>Business</option>
-            <option>Personal</option>
-          </select>
-        </div>
+        <!-- MAIN CONTENT -->
 
-        <div id="documentsList" class="document-grid"></div>
-      </section>
+        <main>
 
-      <section id="activityView" class="view" hidden>
-        <article class="panel">
-          <h2>Activity Logs</h2>
-          <div id="activityList" class="activity-list"></div>
-        </article>
-      </section>
-    </section>
-  </main>
+            <section id="page-overview">
 
-  <dialog id="uploadDialog" class="dialog">
-    <form id="uploadForm">
-      <div class="section-heading">
+                <div class="heading">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p class="muted">Welcome to your secure vault.</p>
+                    </div>
+
+                    <button id="uploadOpen">
+                        + Upload Document
+                    </button>
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <span class="muted">Documents</span>
+                        <strong id="totalCount">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <span class="muted">My Documents</span>
+                        <strong id="ownedCount">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <span class="muted">My Role</span>
+                        <strong id="roleCount">Viewer</strong>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+                    <h2>Recent Documents</h2>
+                    <br>
+                    <div id="recentDocuments" class="doc-grid"></div>
+                </div>
+
+            </section>
+
+
+            <section id="page-documents" class="hidden">
+
+                <div class="heading">
+                    <h1>Documents</h1>
+                    <button id="uploadOpen2">+ Upload</button>
+                </div>
+
+                <div class="panel">
+
+                    <div class="toolbar">
+                        <input id="documentSearch"
+                               placeholder="Search documents...">
+
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option>Academic</option>
+                            <option>Personal</option>
+                            <option>Work</option>
+                            <option>Legal</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div id="myDocuments" class="doc-grid"></div>
+
+                </div>
+
+            </section>
+
+
+            <section id="page-shared" class="hidden">
+                <div class="heading">
+                    <h1>Shared With Me</h1>
+                </div>
+
+                <div class="panel">
+                    <div id="sharedDocuments" class="doc-grid"></div>
+                </div>
+            </section>
+
+
+            <section id="page-activity" class="hidden">
+                <div class="heading">
+                    <h1>Activity Logs</h1>
+                </div>
+
+                <div class="panel">
+                    <div id="activityList"></div>
+                </div>
+            </section>
+
+
+            <section id="page-users" class="hidden">
+                <div class="heading">
+                    <h1>User Management</h1>
+                </div>
+
+                <div class="panel">
+                    <div id="usersList"></div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</section>
+
+
+<!-- UPLOAD MODAL -->
+
+<div id="uploadModal" class="modal hidden">
+
+    <div class="modal-card">
+
         <h2>Upload Document</h2>
-        <button id="closeUploadBtn" type="button">✕</button>
-      </div>
 
-      <label for="docTitle">Document Title</label>
-      <input id="docTitle" type="text" placeholder="Document name">
+        <form id="uploadForm">
 
-      <label for="docCategory">Category</label>
-      <select id="docCategory">
-        <option>General</option>
-        <option>Academic</option>
-        <option>Business</option>
-        <option>Personal</option>
-      </select>
+            <div class="field">
+                <label>Document Title</label>
+                <input id="fileTitle" required>
+            </div>
 
-      <label for="docFile">Select File</label>
-      <input id="docFile" type="file" required>
+            <div class="field">
+                <label>Category</label>
+                <select id="fileCategory">
+                    <option>Academic</option>
+                    <option>Personal</option>
+                    <option>Work</option>
+                    <option>Legal</option>
+                    <option>Other</option>
+                </select>
+            </div>
 
-      <button class="primary full" type="submit">Upload Securely</button>
-      <p id="uploadMessage" class="message"></p>
-    </form>
-  </dialog>
+            <div class="field">
+                <label>Select File</label>
+                <input id="fileInput" type="file" required>
+            </div>
 
-  <div id="toast" class="toast"></div>
+            <div class="modal-actions">
+                <button type="button" class="secondary"
+                        data-close="uploadModal">Cancel</button>
+                <button type="submit">Upload</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- SHARE MODAL -->
+
+<div id="shareModal" class="modal hidden">
+
+    <div class="modal-card">
+
+        <h2>Share Document</h2>
+
+        <form id="shareForm">
+
+            <input type="hidden" id="shareDocumentId">
+
+            <div class="field">
+                <label>Recipient Email</label>
+                <input id="shareEmail" type="email" required>
+            </div>
+
+            <div class="field">
+                <label>Permission</label>
+                <select id="sharePermission">
+                    <option value="read">Read</option>
+                    <option value="edit">Edit</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="secondary"
+                        data-close="shareModal">Cancel</button>
+                <button type="submit">Grant Access</button>
+            </div>
+
+        </form>
+
+        <br>
+        <h3>Current Permissions</h3>
+        <div id="permissionList"></div>
+
+    </div>
+</div>
+
+
+<div id="toast" class="toast hidden"></div>
+
+<script>
+// =====================================
+// TRUSTVAULT - SUPABASE CONFIGURATION
+// =====================================
+
+const SUPABASE_URL = "https://lkgwzavjyfqgylpparhe.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_SRROVwa_Wemf5wLDncg61w_dzCJV_xb";
+
+const BUCKET = "trustvault-documents";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+// =====================================
+// GLOBAL VARIABLES
+// =====================================
+
+let currentUser = null;
+let currentProfile = null;
+let authMode = "login";
+let recoveryMode = false;
+
+// =====================================
+// HELPER FUNCTIONS
+// =====================================
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+
+    setTimeout(() => {
+        toast.classList.add("hidden");
+    }, 3500);
+}
+
+function showAuth() {
+    document.getElementById("authSection").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+}
+
+function showDashboard() {
+    document.getElementById("authSection").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+}
+
+function setAuthMode(mode) {
+    authMode = mode;
+
+    const title = document.getElementById("authTitle");
+    const subtitle = document.getElementById("authSubtitle");
+    const button = document.getElementById("authButton");
+    const nameField = document.getElementById("nameField");
+    const confirmField = document.getElementById("confirmField");
+    const modeButton = document.getElementById("modeButton");
+    const forgotButton = document.getElementById("forgotButton");
+
+    nameField.classList.add("hidden");
+    confirmField.classList.add("hidden");
+    forgotButton.classList.remove("hidden");
+
+    if (mode === "login") {
+        title.textContent = "Welcome Back";
+        subtitle.textContent = "Sign in to your secure workspace.";
+        button.textContent = "Login";
+        modeButton.textContent = "Create Account";
+    }
+
+    if (mode === "register") {
+        title.textContent = "Create Account";
+        subtitle.textContent = "Register for your TrustVault account.";
+        button.textContent = "Register";
+        nameField.classList.remove("hidden");
+        modeButton.textContent = "Already have an account? Login";
+        forgotButton.classList.add("hidden");
+    }
+
+    if (mode === "forgot") {
+        title.textContent = "Forgot Password";
+        subtitle.textContent = "Enter your email to receive a reset link.";
+        button.textContent = "Send Reset Link";
+        modeButton.textContent = "Back to Login";
+        forgotButton.classList.add("hidden");
+    }
+
+    if (mode === "recovery") {
+        title.textContent = "Set New Password";
+        subtitle.textContent = "Enter and confirm your new password.";
+        button.textContent = "Update Password";
+        confirmField.classList.remove("hidden");
+        modeButton.textContent = "Back to Login";
+        forgotButton.classList.add("hidden");
+    }
+
+    document.getElementById("password").required =
+        mode !== "forgot";
+
+    document.getElementById("confirmPassword").required =
+        mode === "recovery";
+}
+
+// =====================================
+// LOGIN / REGISTER / FORGOT PASSWORD
+// =====================================
+
+document.getElementById("authForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("authButton");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    button.disabled = true;
+
+    try {
+
+        if (authMode === "login") {
+
+            const { data, error } = await db.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) throw error;
+
+            currentUser = data.user;
+
+            await startApp();
+
+        }
+
+        else if (authMode === "register") {
+
+            const fullName = document.getElementById("fullName").value.trim();
+
+            if (!fullName) {
+                throw new Error("Please enter your full name.");
+            }
+
+            if (password.length < 6) {
+                throw new Error("Password must be at least 6 characters.");
+            }
+
+            const { data, error } = await db.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName
+                    }
+                }
+            });
+
+            if (error) throw error;
+
+            if (data.session) {
+                currentUser = data.user;
+                await startApp();
+            } else {
+                showToast("Registration successful! Check your email to verify your account.");
+                setAuthMode("login");
+            }
+
+        }
+
+        else if (authMode === "forgot") {
+
+            const { error } = await db.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin
+            });
+
+            if (error) throw error;
+
+            showToast("Password reset link sent. Check your email.");
+            setAuthMode("login");
+
+        }
+
+        else if (authMode === "recovery") {
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            if (password.length < 6) {
+                throw new Error("Password must be at least 6 characters.");
+            }
+
+            if (password !== confirmPassword) {
+                throw new Error("Passwords do not match.");
+            }
+
+            const { error } = await db.auth.updateUser({
+                password: password
+            });
+
+            if (error) throw error;
+
+            recoveryMode = false;
+            showToast("Password updated successfully. Please login.");
+            await db.auth.signOut();
+            setAuthMode("login");
+
+        }
+
+    } catch (error) {
+        console.error(error);
+        showToast(error.message || "Something went wrong.");
+    } finally {
+        button.disabled = false;
+    }
+});
+
+// =====================================
+// AUTH MODE BUTTONS
+// =====================================
+
+document.getElementById("modeButton").addEventListener("click", function() {
+
+    if (authMode === "login") {
+        setAuthMode("register");
+    } else {
+        setAuthMode("login");
+    }
+
+});
+
+document.getElementById("forgotButton").addEventListener("click", function() {
+    setAuthMode("forgot");
+});
+
+// =====================================
+// PASSWORD RECOVERY EVENT
+// =====================================
+
+db.auth.onAuthStateChange(async (event, session) => {
+
+    if (event === "PASSWORD_RECOVERY") {
+        recoveryMode = true;
+        setAuthMode("recovery");
+        showAuth();
+    }
+
+    if (event === "SIGNED_OUT") {
+        currentUser = null;
+        currentProfile = null;
+        showAuth();
+    }
+
+});
+
+// =====================================
+// LOAD USER PROFILE
+// =====================================
+
+async function loadProfile() {
+
+    const { data, error } = await db
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .single();
+
+    if (error) throw error;
+
+    currentProfile = data;
+
+    document.getElementById("userName").textContent =
+        data.full_name || currentUser.email;
+
+    document.getElementById("userEmail").textContent =
+        currentUser.email;
+
+    document.getElementById("userRole").textContent =
+        "Role: " + data.role;
+
+    document.getElementById("roleCount").textContent =
+        data.role;
+
+    if (data.role === "admin") {
+        document.getElementById("adminNav").classList.remove("hidden");
+    } else {
+        document.getElementById("adminNav").classList.add("hidden");
+    }
+
+}
+
+// =====================================
+// START APPLICATION AFTER LOGIN
+// =====================================
+
+async function startApp() {
+
+    try {
+
+        const { data } = await db.auth.getUser();
+
+        if (!data.user) {
+            showAuth();
+            return;
+        }
+
+        currentUser = data.user;
+
+        await loadProfile();
+
+        showDashboard();
+
+        showPage("overview");
+
+        await renderAll();
+
+        showToast("Welcome to TrustVault!");
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Unable to load your profile: " + error.message);
+
+    }
+
+}
+
+// =====================================
+// LOGOUT
+// =====================================
+
+document.getElementById("logoutButton").addEventListener("click", async function() {
+
+    const { error } = await db.auth.signOut();
+
+    if (error) {
+        showToast(error.message);
+        return;
+    }
+
+    currentUser = null;
+    currentProfile = null;
+
+    showAuth();
+    setAuthMode("login");
+
+    showToast("Logged out successfully.");
+
+});
+
+// =====================================
+// CHECK EXISTING SESSION
+// =====================================
+
+async function initializeAuth() {
+
+    const { data, error } = await db.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        showAuth();
+        return;
+    }
+
+    if (data.session && !recoveryMode) {
+        currentUser = data.session.user;
+        await startApp();
+    } else {
+        showAuth();
+    }
+
+}
+
+setAuthMode("login");
+initializeAuth();
+
+
+
+// =====================================
+// DOCUMENTS DATA
+// =====================================
+
+let allDocuments = [];
+let sharedDocumentsData = [];
+
+function isAdmin() {
+    return currentProfile?.role === "admin";
+}
+
+function canManageDocument(doc) {
+    return isAdmin() || doc.owner_id === currentUser?.id;
+}
+
+function formatDate(value) {
+    if (!value) return "-";
+    return new Date(value).toLocaleDateString();
+}
+
+// =====================================
+// LOAD DOCUMENTS
+// =====================================
+
+async function loadDocuments() {
+
+    const { data, error } = await db
+        .from("documents")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        throw error;
+    }
+
+    allDocuments = data || [];
+
+    const { data: permissions, error: permissionError } = await db
+        .from("document_permissions")
+        .select("document_id")
+        .eq("grantee_id", currentUser.id);
+
+    if (permissionError) {
+        console.error(permissionError);
+        sharedDocumentsData = [];
+    } else {
+        const sharedIds = (permissions || []).map(p => p.document_id);
+
+        sharedDocumentsData = allDocuments.filter(doc =>
+            sharedIds.includes(doc.id) &&
+            doc.owner_id !== currentUser.id
+        );
+    }
+
+}
+
+// =====================================
+// RENDER ALL DOCUMENTS
+// =====================================
+
+async function renderAll() {
+
+    await loadDocuments();
+
+    const myDocs = allDocuments.filter(doc =>
+        canManageDocument(doc)
+    );
+
+    document.getElementById("totalCount").textContent =
+        allDocuments.length;
+
+    document.getElementById("ownedCount").textContent =
+        myDocs.filter(doc => doc.owner_id === currentUser.id).length;
+
+    renderFiles("myDocuments", myDocs);
+    renderFiles("recentDocuments", myDocs.slice(0, 4));
+    renderFiles("sharedDocuments", sharedDocumentsData);
+
+}
+
+// =====================================
+// DOCUMENT CARD RENDERING
+// =====================================
+
+function renderFiles(containerId, documents) {
+
+    const container = document.getElementById(containerId);
+
+    if (!container) return;
+
+    if (!documents.length) {
+        container.innerHTML =
+            '<div class="empty">No documents found.</div>';
+        return;
+    }
+
+    container.innerHTML = documents.map(doc => {
+
+        const owner = canManageDocument(doc);
+        const canEdit = owner || doc.owner_id !== currentUser.id;
+
+        return `
+        <div class="doc-card">
+
+            <h3>📄 ${escapeHTML(doc.title || "Untitled")}</h3>
+
+            <div class="doc-meta">
+                Category: ${escapeHTML(doc.category || "Other")}<br>
+                Uploaded: ${formatDate(doc.created_at)}<br>
+                ${doc.owner_id === currentUser.id ? "Your document" : "Shared document"}
+            </div>
+
+            <div class="actions">
+
+                <button onclick="downloadFile('${doc.id}')">
+                    Download
+                </button>
+
+                ${owner ? `
+                    <button class="secondary"
+                        onclick="renameFile('${doc.id}')">
+                        Rename
+                    </button>
+
+                    <button class="secondary"
+                        onclick="shareFile('${doc.id}')">
+                        Share
+                    </button>
+
+                    <button class="danger"
+                        onclick="deleteFile('${doc.id}')">
+                        Delete
+                    </button>
+                ` : ""}
+
+            </div>
+
+        </div>
+        `;
+    }).join("");
+
+}
+
+// Escape user-controlled text before inserting into HTML.
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[character]);
+}
+
+// =====================================
+// PAGE NAVIGATION
+// =====================================
+
+function showPage(page) {
+
+    const pages = [
+        "overview",
+        "documents",
+        "shared",
+        "activity",
+        "users"
+    ];
+
+    pages.forEach(name => {
+        document.getElementById("page-" + name)
+            .classList.toggle("hidden", name !== page);
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.page === page
+        );
+    });
+
+    if (page === "activity") {
+        renderHistory();
+    }
+
+    if (page === "users" && isAdmin()) {
+        loadUsers();
+    }
+
+}
+
+document.querySelectorAll(".nav-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+        showPage(button.dataset.page);
+    });
+
+});
+
+// =====================================
+// OPEN / CLOSE MODALS
+// =====================================
+
+function openModal(id) {
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.add("hidden");
+}
+
+document.getElementById("uploadOpen").addEventListener("click", () => {
+    openModal("uploadModal");
+});
+
+document.getElementById("uploadOpen2").addEventListener("click", () => {
+    openModal("uploadModal");
+});
+
+document.querySelectorAll("[data-close]").forEach(button => {
+
+    button.addEventListener("click", () => {
+        closeModal(button.dataset.close);
+    });
+
+});
+
+// =====================================
+// UPLOAD DOCUMENT
+// =====================================
+
+document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    if (!currentUser) {
+        showToast("Please login first.");
+        return;
+    }
+
+    const file = document.getElementById("fileInput").files[0];
+    const title = document.getElementById("fileTitle").value.trim();
+    const category = document.getElementById("fileCategory").value;
+
+    if (!file || !title) {
+        showToast("Please enter a title and select a file.");
+        return;
+    }
+
+    const button = this.querySelector('button[type="submit"]');
+    button.disabled = true;
+
+    const storagePath =
+        currentUser.id + "/" + crypto.randomUUID() + "-" +
+        file.name.replace(/[^\w.-]/g, "_");
+
+    let documentId = null;
+try {
+
+    // Step 1: Save document details in database.
+    const { data: documentData, error: insertError } = await db
+        .from("documents")
+        .insert({
+            title: title,
+            category: category,
+            owner_id: currentUser.id,
+            storage_path: storagePath,
+            file_name: file.name,
+            file_type: file.type,
+            mime_type: file.type || "application/octet-stream",
+            file_size: file.size,
+            size_bytes: file.size
+        })
+        .select()
+        .single();
+
+    if (insertError) throw insertError;
+
+        documentId = documentData.id;
+
+        // Step 2: Upload actual file to private storage.
+        const { error: uploadError } = await db
+            .storage
+            .from(BUCKET)
+            .upload(storagePath, file);
+
+        if (uploadError) throw uploadError;
+
+        // Step 3: Refresh document list.
+        this.reset();
+
+        closeModal("uploadModal");
+
+        await renderAll();
+
+        showToast("Document uploaded successfully!");
+
+    } catch (error) {
+
+        console.error("Upload error:", error);
+
+        // Remove database record if storage upload failed.
+        if (documentId) {
+            await db
+                .from("documents")
+                .delete()
+                .eq("id", documentId);
+        }
+
+        showToast("Upload failed: " + error.message);
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+
+});
+
+
+
+// =====================================
+// DOWNLOAD DOCUMENT
+// =====================================
+
+async function downloadFile(id) {
+
+    try {
+
+        const doc = allDocuments.find(item => item.id === id);
+
+        if (!doc) {
+            throw new Error("Document not found.");
+        }
+
+        // Log download before allowing the download.
+        const { data: logged, error: logError } = await db.rpc(
+            "trustvault_log_download",
+            { p_document_id: id }
+        );
+
+        if (logError) throw logError;
+
+        if (logged !== true) {
+            throw new Error("You do not have permission to download this document.");
+        }
+
+        const { data, error } = await db.storage
+            .from(BUCKET)
+            .download(doc.storage_path);
+
+        if (error) throw error;
+
+        const url = URL.createObjectURL(data);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = doc.file_name || doc.title || "document";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        showToast("Download started.");
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Download failed: " + error.message);
+
+    }
+
+}
+
+// =====================================
+// RENAME DOCUMENT
+// =====================================
+
+async function renameFile(id) {
+
+    const doc = allDocuments.find(item => item.id === id);
+
+    if (!doc || !canManageDocument(doc)) return;
+
+    const newTitle = prompt("Enter new document title:", doc.title);
+
+    if (!newTitle || !newTitle.trim()) return;
+
+    try {
+
+        const { error } = await db
+            .from("documents")
+            .update({ title: newTitle.trim() })
+            .eq("id", id);
+
+        if (error) throw error;
+
+        await renderAll();
+
+        showToast("Document renamed successfully.");
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Rename failed: " + error.message);
+
+    }
+
+}
+
+// =====================================
+// DELETE DOCUMENT
+// =====================================
+
+async function deleteFile(id) {
+
+    const doc = allDocuments.find(item => item.id === id);
+
+    if (!doc || !canManageDocument(doc)) return;
+
+    const confirmed = confirm(
+        "Are you sure you want to permanently delete " +
+        doc.title + "?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+
+        // Remove the actual file from private storage.
+        const { error: storageError } = await db.storage
+            .from(BUCKET)
+            .remove([doc.storage_path]);
+
+        if (storageError) throw storageError;
+
+        // Delete metadata after storage removal.
+        const { error: deleteError } = await db
+            .from("documents")
+            .delete()
+            .eq("id", id);
+
+        if (deleteError) {
+            throw new Error(
+                "File removed from storage, but database deletion failed: " +
+                deleteError.message
+            );
+        }
+
+        await renderAll();
+
+        showToast("Document deleted successfully.");
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Delete failed: " + error.message);
+
+    }
+
+}
+
+// =====================================
+// SEARCH AND CATEGORY FILTER
+// =====================================
+
+function filterDocuments() {
+
+    const search = document.getElementById("documentSearch")
+        .value.toLowerCase();
+
+    const category = document.getElementById("categoryFilter").value;
+
+    const filtered = allDocuments.filter(doc => {
+
+        const allowed = canManageDocument(doc);
+
+        const matchesSearch =
+            (doc.title || "").toLowerCase().includes(search);
+
+        const matchesCategory =
+            !category || doc.category === category;
+
+        return allowed && matchesSearch && matchesCategory;
+
+    });
+
+    renderFiles("myDocuments", filtered);
+
+}
+
+document.getElementById("documentSearch")
+    .addEventListener("input", filterDocuments);
+
+document.getElementById("categoryFilter")
+    .addEventListener("change", filterDocuments);
+
+// =====================================
+// SHARE DOCUMENT
+// =====================================
+
+async function shareFile(id) {
+
+    const doc = allDocuments.find(item => item.id === id);
+
+    if (!doc || !canManageDocument(doc)) return;
+
+    document.getElementById("shareDocumentId").value = id;
+
+    document.getElementById("shareEmail").value = "";
+
+    document.getElementById("sharePermission").value = "read";
+
+    openModal("shareModal");
+
+    await loadPermissions(id);
+
+}
+
+document.getElementById("shareForm").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const id = document.getElementById("shareDocumentId").value;
+    const email = document.getElementById("shareEmail").value.trim();
+    const permission = document.getElementById("sharePermission").value;
+
+    try {
+
+        const { error } = await db.rpc(
+            "trustvault_grant_permission",
+            {
+                p_document_id: id,
+                p_email: email,
+                p_permission: permission
+            }
+        );
+
+        if (error) throw error;
+
+        showToast("Document access granted.");
+
+        document.getElementById("shareEmail").value = "";
+
+        await loadPermissions(id);
+
+        await renderAll();
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Sharing failed: " + error.message);
+
+    }
+
+});
+
+// =====================================
+// LOAD CURRENT PERMISSIONS
+// =====================================
+
+async function loadPermissions(documentId) {
+
+    const container = document.getElementById("permissionList");
+
+    container.innerHTML = "Loading permissions...";
+
+    try {
+
+        const { data, error } = await db
+            .from("document_permissions")
+            .select("id, grantee_id, permission")
+            .eq("document_id", documentId);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            container.innerHTML =
+                '<p class="muted">No users have access yet.</p>';
+            return;
+        }
+
+        container.innerHTML = data.map(permission => `
+            <div class="doc-card" style="margin-top:10px">
+                <p>${escapeHTML(permission.grantee_id)}</p>
+                <p class="muted">Permission: ${escapeHTML(permission.permission)}</p>
+                <button class="danger"
+                    onclick="revokeFile('${documentId}','${permission.grantee_id}')">
+                    Revoke
+                </button>
+            </div>
+        `).join("");
+
+    } catch (error) {
+
+        console.error(error);
+        container.textContent = "Unable to load permissions: " + error.message;
+
+    }
+
+}
+
+// =====================================
+// REVOKE SHARED ACCESS
+// =====================================
+
+async function revokeFile(documentId, granteeId) {
+
+    if (!confirm("Revoke access for this user?")) return;
+
+    try {
+
+        const { error } = await db
+            .from("document_permissions")
+            .delete()
+            .eq("document_id", documentId)
+            .eq("grantee_id", granteeId);
+
+        if (error) throw error;
+
+        await loadPermissions(documentId);
+        await renderAll();
+
+        showToast("Access revoked.");
+
+    } catch (error) {
+
+        console.error(error);
+        showToast("Revoke failed: " + error.message);
+
+    }
+
+}
+
+// =====================================
+// ACTIVITY LOGS
+// =====================================
+
+async function renderHistory() {
+
+    const container = document.getElementById("activityList");
+
+    container.innerHTML = "Loading activity...";
+
+    try {
+
+        const { data, error } = await db
+            .from("audit_logs")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(100);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            container.innerHTML =
+                '<div class="empty">No activity records found.</div>';
+            return;
+        }
+
+        container.innerHTML = data.map(log => {
+
+            const action = escapeHTML(log.action || "Activity");
+            const details = escapeHTML(
+                typeof log.details === "object"
+                    ? JSON.stringify(log.details)
+                    : (log.details || "")
+            );
+
+            return `
+                <div class="doc-card" style="margin-bottom:12px">
+                    <strong>${action}</strong>
+                    <p class="muted">${details}</p>
+                    <small class="muted">
+                        ${formatDate(log.created_at)}
+                    </small>
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+            '<div class="empty">Unable to load activity: ' +
+            escapeHTML(error.message) + '</div>';
+
+    }
+
+}
+
+
+// =====================================
+// ADMIN - LOAD USERS
+// =====================================
+
+async function loadUsers() {
+
+    const container = document.getElementById("usersList");
+
+    if (!isAdmin()) {
+        container.textContent = "Admin access required.";
+        return;
+    }
+
+    container.innerHTML = "Loading users...";
+
+    try {
+
+        const { data, error } = await db.rpc(
+            "trustvault_list_users"
+        );
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            container.innerHTML =
+                '<div class="empty">No users found.</div>';
+            return;
+        }
+
+        container.innerHTML = data.map(user => {
+
+            const isCurrentUser = user.id === currentUser.id;
+
+            return `
+                <div class="doc-card" style="margin-bottom:12px">
+
+                    <h3>${escapeHTML(user.full_name || "User")}</h3>
+
+                    <p class="muted">
+                        ${escapeHTML(user.email || "")}
+                    </p>
+
+                    <p class="muted">
+                        Current role: ${escapeHTML(user.role || "viewer")}
+                    </p>
+
+                    ${
+                        isCurrentUser
+                        ? '<small class="muted">Your account</small>'
+                        : `
+                            <div class="field">
+                                <select id="role-${user.id}">
+                                    <option value="viewer"
+                                        ${user.role === "viewer" ? "selected" : ""}>
+                                        Viewer
+                                    </option>
+
+                                    <option value="admin"
+                                        ${user.role === "admin" ? "selected" : ""}>
+                                        Admin
+                                    </option>
+                                </select>
+                            </div>
+
+                            <button style="margin-top:10px"
+                                onclick="changeRole('${user.id}')">
+                                Update Role
+                            </button>
+                        `
+                    }
+
+                </div>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+            '<div class="empty">Unable to load users: ' +
+            escapeHTML(error.message) + '</div>';
+
+    }
+
+}
+
+
+// =====================================
+// ADMIN - CHANGE USER ROLE
+// =====================================
+
+async function changeRole(userId) {
+
+    if (!isAdmin()) {
+        showToast("Admin access required.");
+        return;
+    }
+
+    if (userId === currentUser.id) {
+        showToast("You cannot change your own role here.");
+        return;
+    }
+
+    const select = document.getElementById("role-" + userId);
+
+    if (!select) return;
+
+    const newRole = select.value;
+
+    if (!confirm("Change this user's role to " + newRole + "?")) {
+        return;
+    }
+
+    try {
+
+        const { error } = await db.rpc(
+            "trustvault_set_user_role",
+            {
+                p_user_id: userId,
+                p_role: newRole
+            }
+        );
+
+        if (error) throw error;
+
+        showToast("User role updated successfully.");
+
+        await loadUsers();
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast("Role update failed: " + error.message);
+
+    }
+
+}
+
+
+// =====================================
+// FINAL APPLICATION INITIALIZATION
+// =====================================
+
+// Close a modal when clicking outside its card.
+document.querySelectorAll(".modal").forEach(modal => {
+
+    modal.addEventListener("click", function(event) {
+
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+
+    });
+
+});
+
+// Set initial authentication screen.
+setAuthMode("login");
+
+// Final closing tags for the complete HTML file.
+</script>
 </body>
 </html>
