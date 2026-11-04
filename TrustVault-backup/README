@@ -1,0 +1,95 @@
+# TrustVault
+
+**Secure Document Sharing Platform**
+
+TrustVault is a web-based document-sharing platform designed to protect confidential documents through authentication, role-based access control, private file storage, permission management and audit logging.
+
+## Live Demo
+
+https://trustvault-seven-eta.vercel.app/
+
+## GitHub Repository
+
+https://github.com/udaykumarj64-lang/TrustVault
+
+## Technology Stack
+
+- HTML
+- CSS
+- JavaScript
+- Supabase Authentication
+- Supabase PostgreSQL
+- Supabase Row Level Security (RLS)
+- Supabase Private Storage
+
+## Key Features
+
+- User authentication.
+- Document upload and management.
+- Private document storage.
+- Read and edit permission management.
+- Permission granting and revocation.
+- Document access control using RLS.
+- Audit logs for document and permission activities.
+- Security testing using pgTAP.
+
+## User Roles
+
+- **Admin:** Administrative access according to database policies.
+- **Document Owner:** Intended role for managing owned documents and sharing permissions.
+- **Viewer:** Can access documents only when authorized.
+
+**Note:** Dedicated document-owner role support requires further implementation and testing.
+
+## Local Setup
+
+1. Clone the GitHub repository.
+2. Open the project folder in VS Code.
+3. Create a Supabase project.
+4. Configure the required database tables, functions and RLS policies.
+5. Create a private Storage bucket named `trustvault-documents`.
+6. Add the Supabase Project URL and Publishable Key to `script.js`.
+7. Open `index.html` using VS Code Live Server.
+
+## Security
+
+- Only the Supabase Publishable Key is used in frontend code.
+- Never expose the Supabase Secret or service-role key.
+- Database access is protected using Row Level Security.
+- Storage access is controlled using Storage policies.
+- Permission changes and relevant document activities are recorded in audit logs.
+- Unauthorized access attempts are checked and logged through the authorization function.
+
+## Automated Security Testing
+
+Security tests are maintained in:
+
+`tests/security-tests.sql`
+
+The tests use the pgTAP extension and check:
+
+1. Viewer cannot access a revoked document.
+2. Viewer cannot view revoked permissions.
+3. Viewer cannot modify a revoked document.
+4. Viewer cannot delete a revoked document.
+5. Admin can view the tested document.
+
+Run the SQL script in the Supabase SQL Editor.
+
+**Current test result: 5/5 tested scenarios passed.**
+
+## Production Security Checklist
+
+- [ ] Verify RLS policies for every table.
+- [ ] Test Storage access using separate accounts.
+- [ ] Implement and test a dedicated document-owner role.
+- [ ] Verify immediate permission revocation for every download method.
+- [ ] Verify audit logs are protected against unauthorized modification.
+- [ ] Add server-side file validation and malware scanning.
+- [ ] Test permission grants and revocations automatically.
+- [ ] Configure production Site URL and redirect URLs.
+- [ ] Complete an independent security review.
+
+## Security Disclaimer
+
+The current automated tests cover selected authorization scenarios only. Passing these tests does not establish production-level security. Additional testing and security improvements are required.
