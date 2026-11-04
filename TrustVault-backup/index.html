@@ -394,6 +394,7 @@ main {min-width:0;padding:5px 0}
 <div class="panel">
 <div class="toolbar">
 <input id="documentSearch" placeholder="Search documents...">
+<input id="documentOwnerSearch" placeholder="Search by owner...">
 <select id="categoryFilter">
 <option value="">All Categories</option>
 <option>Academic</option>
@@ -500,8 +501,17 @@ main {min-width:0;padding:5px 0}
 </div>
 
 <div class="field">
-<label>Select File</label>
-<input id="fileInput" type="file" required>
+    <label>Select File</label>
+    <input
+        id="fileInput"
+        type="file"
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png"
+        required
+    >
+    <small class="file-hint">
+        Allowed: PDF, Word, Excel, PowerPoint, TXT, JPG, PNG.
+        Maximum size: 10 MB.
+    </small>
 </div>
 
 <div class="modal-actions">
@@ -898,6 +908,24 @@ async function loadDocuments() {
     if (error) throw error;
 
     allDocuments = data || [];
+    const { data: ownerRows, error: ownerError } =
+    await db.rpc("trustvault_document_owners");
+
+if (ownerError) {
+    console.error("Owner search error:", ownerError);
+} else {
+    const ownerMap = new Map(
+        (ownerRows || []).map(row => [
+            row.document_id,
+            row.owner_name
+        ])
+    );
+
+    allDocuments = allDocuments.map(doc => ({
+        ...doc,
+        owner_name: ownerMap.get(doc.id) || "Unknown"
+    }));
+}
 
     const { data: permissions, error: permissionError } = await db
         .from("document_permissions")
@@ -1048,6 +1076,37 @@ $("uploadForm").addEventListener("submit", async function(event) {
         showToast("Select an existing document.");
         return;
     }
+    const allowedTypes = {
+    pdf: ["application/pdf"],
+    doc: ["application/msword"],
+    docx: ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+    xls: ["application/vnd.ms-excel"],
+    xlsx: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+    ppt: ["application/vnd.ms-powerpoint"],
+    pptx: ["application/vnd.openxmlformats-officedocument.presentationml.presentation"],
+    txt: ["text/plain"],
+    jpg: ["image/jpeg"],
+    jpeg: ["image/jpeg"],
+    png: ["image/png"]
+};
+
+const extension = file.name.split(".").pop().toLowerCase();
+const allowedMimes = allowedTypes[extension];
+
+if (!allowedMimes) {
+    showToast("Invalid file type. Upload an allowed document only.");
+    return;
+}
+
+if (file.type && !allowedMimes.includes(file.type)) {
+    showToast("File type does not match its extension.");
+    return;
+}
+
+if (file.size > 10 * 1024 * 1024) {
+    showToast("File size must not exceed 10 MB.");
+    return;
+}
 
     const button = this.querySelector('button[type="submit"]');
     button.disabled = true;
