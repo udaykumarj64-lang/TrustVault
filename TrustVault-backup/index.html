@@ -1773,9 +1773,10 @@ async function loadUsers() {
                         : `
                             <div class="field">
                                 <select id="role-${escapeHTML(userId)}">
-                                    <option value="viewer" ${role === "viewer" ? "selected" : ""}>Viewer</option>
-                                    <option value="admin" ${role === "admin" ? "selected" : ""}>Admin</option>
-                                </select>
+    <option value="viewer" ${role === "viewer" ? "selected" : ""}>Viewer</option>
+    <option value="owner" ${role === "owner" ? "selected" : ""}>Owner</option>
+    <option value="admin" ${role === "admin" ? "selected" : ""}>Admin</option>
+</select>
                             </div>
 
                             <button style="margin-top:10px"
@@ -1817,7 +1818,7 @@ async function changeRole(userId) {
 
     const newRole = select.value;
 
-    if (!["admin", "viewer"].includes(newRole)) {
+  if (!["admin", "owner", "viewer"].includes(newRole)) {
         showToast("Invalid role selected.");
         return;
     }
