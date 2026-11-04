@@ -1417,7 +1417,6 @@ function getUserId(user) {
         user?.user_uuid ??
         null;
 }
-
 $("shareForm").addEventListener("submit", async event => {
     event.preventDefault();
 
@@ -1436,57 +1435,18 @@ $("shareForm").addEventListener("submit", async event => {
     button.disabled = true;
 
     try {
-        const { data: users, error: usersError } =
-            await db.rpc("trustvault_list_users");
-
-        if (usersError) throw usersError;
-
-        const user = (users || []).find(
-            u => u.email?.toLowerCase() === email.toLowerCase()
+        const { error } = await db.rpc(
+            "trustvault_grant_permission",
+            {
+                p_document_id: id,
+                p_email: email,
+                p_permission: permission
+            }
         );
 
-        if (!user) throw new Error("User not found.");
+        if (error) throw error;
 
-        const granteeId = getUserId(user);
-
-        if (!granteeId) throw new Error("Unable to identify user ID.");
-        if (granteeId === currentUser.id) throw new Error("You already own this document.");
-
-        const { data: existing, error: checkError } = await db
-            .from("document_permissions")
-            .select("document_id")
-            .eq("document_id", id)
-            .eq("grantee_id", granteeId)
-            .maybeSingle();
-
-        if (checkError) throw checkError;
-
-        if (existing) {
-            const { error } = await db
-                .from("document_permissions")
-                .update({ permission })
-                .eq("document_id", id)
-                .eq("grantee_id", granteeId);
-
-            if (error) throw error;
-
-            showToast("Existing permission updated.");
-
-        } else {
-            const { error } = await db.rpc(
-                "trustvault_grant_permission",
-                {
-                    p_document_id: id,
-                    p_email: email,
-                    p_permission: permission
-                }
-            );
-
-            if (error) throw error;
-
-            showToast("Document access granted.");
-        }
-
+        showToast("Document access granted.");
         $("shareEmail").value = "";
 
         await loadPermissions(id);
