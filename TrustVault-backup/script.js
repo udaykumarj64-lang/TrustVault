@@ -109,7 +109,7 @@ async function loadProfile() {
 async function loadDocuments() {
   const { data, error } = await db
     .from("documents")
-    .select("id,ownerid,title,catageory,storagepath,mime_byte,size_byete,created_at")
+    .select("id,owner_id,title,category,storage_path,mime_type,size_bytes,created_at")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -118,7 +118,6 @@ async function loadDocuments() {
   $("documentCount").textContent = documents.length;
   renderDocuments();
 }
-
 function renderDocuments() {
   const search = $("searchInput").value.toLowerCase().trim();
   const category = $("categoryFilter").value;
@@ -126,7 +125,7 @@ function renderDocuments() {
   const filtered = documents.filter(item =>
     (!search || `${item.title} ${item.category}`.toLowerCase().includes(search)) &&
     (!category || item.category === category)
-  );item.category
+  );
 
   $("documentsList").innerHTML = filtered.length
     ? filtered.map(item => `
@@ -136,7 +135,7 @@ function renderDocuments() {
         <p>${safe(item.mime_type || "File")}</p>
         <p>${item.size_bytes ? (item.size_bytes / 1024).toFixed(1) + " KB" : ""}</p>
         <button class="primary" data-download="${safe(item.id)}">Download</button>
-        ${item.size_bytes === currentUser.id || currentProfile.role === "admin"
+        ${item.owner_id === currentUser.id || currentProfile.role === "admin"
           ? `<button class="danger" data-delete="${safe(item.id)}">Delete</button>`
           : ""}
       </article>
@@ -152,9 +151,7 @@ function renderDocuments() {
   });
 }
 
-async function uploadFile(event) {
- 
-async function uploadFile(event) {
+ async function uploadFile(event) {
   event.preventDefault();
 
   const file = $("docFile").files[0];
@@ -192,12 +189,12 @@ async function uploadFile(event) {
     const { data: doc, error: dbError } = await db
       .from("documents")
       .insert({
-        ownerid: currentUser.id,
+        owner_id: currentUser.id,
         title: $("docTitle").value.trim() || file.name,
-        catageory: $("docCategory").value,
-        storagepath: path,
-        mime_byte: file.type,
-        size_byete: file.size
+        category: $("docCategory").value,
+        storage_path: path,
+        mime_type: file.type,
+        size_bytes: file.size
       })
       .select()
       .single();
@@ -230,60 +227,44 @@ async function uploadFile(event) {
     message(error.message, "uploadMessage");
   }
 }
-
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${currentUser.id}/${crypto.randomUUID()}-${safeName}`;
-
-  try {
-    const { error: storageError } = await db.storage
-      .from(BUCKET)
-      .upload(path, file, { contentType: file.type, upsert: false });
-
-    if (storageError) throw storageError;
-
-const { error: rowError } = await db.from("documents").insert({
-  ownerid: currentUser.id,
-  title: $("docTitle").value.trim() || file.name,
-  catageory: $("docCategory").value,
-  storagepath: path,
-  mime_byte: file.type,
-  size_byete: file.size
-});
-
-    if (rowError) {
-      await db.storage.from(BUCKET).remove([path]);
-      throw rowError;
-    }
-
-    $("uploadForm").reset();
-    $("uploadDialog").close();
-    await loadDocuments();
-    await loadActivity();
-    toast("Document upload successful!");
-  } catch (error) {
-    message(error.message, "uploadMessage");
-  }
-}
-
 async function downloadFile(id) {
   const record = documents.find(item => item.id === id);
   if (!record) return toast("Document not found.");
 
+  // Step 1: Check permission and record download attempt
+  const { data: allowed, error: auditError } = await db.rpc(
+    "trustvault_log_download",
+    { p_document_id: id }
+  );
+
+  if (auditError) {
+    return toast("Access check failed: " + auditError.message);
+  }
+
+  if (!allowed) {
+    return toast("You do not have permission to download this document.");
+  }
+
+  // Step 2: Download file from private Storage
   const { data, error } = await db.storage
     .from(BUCKET)
     .download(record.storage_path);
 
-  if (error) return toast("Download failed: " + error.message);
+  if (error) {
+    return toast("Download failed: " + error.message);
+  }
 
+  // Step 3: Save file to user's device
   const url = URL.createObjectURL(data);
   const link = document.createElement("a");
   link.href = url;
-  link.download = record.title || "document";
+  link.download = record.file_name || record.title || "document";
   document.body.appendChild(link);
   link.click();
   link.remove();
 
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+
   toast("Download started.");
 }
 

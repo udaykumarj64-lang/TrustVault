@@ -1,3 +1,5 @@
+<!-- TRUSTVAULT COMPLETE HTML -->
+<!-- Your Supabase configuration is retained. -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,263 +11,545 @@
 
 <style>
 :root {
- --bg:#070b18;--surface:#10182b;--surface2:#151f35;
- --border:rgba(148,170,210,.14);--text:#f3f6ff;
- --muted:#91a1bd;--blue:#438cff;--cyan:#42d5ef;
- --purple:#9275ff;--red:#ff647c;--radius:17px;
+ --bg:#070b18;
+ --surface:#10182b;
+ --surface2:#151f35;
+ --border:rgba(148,170,210,.14);
+ --text:#f3f6ff;
+ --muted:#91a1bd;
+ --blue:#438cff;
+ --cyan:#42d5ef;
+ --purple:#9275ff;
+ --red:#ff647c;
+ --radius:17px;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,"Segoe UI",Arial,sans-serif}
-body{min-height:100vh;color:var(--text);background:radial-gradient(ellipse at 10% 0%,#14264a 0%,transparent 35%),radial-gradient(ellipse at 95% 90%,#211747 0%,transparent 30%),var(--bg)}
-button,input,select{font:inherit}
-button{cursor:pointer;border:1px solid transparent;border-radius:11px;padding:11px 17px;color:white;font-weight:700;background:linear-gradient(110deg,#2677e8,#795df0);transition:.2s}
-button:hover{transform:translateY(-2px);filter:brightness(1.1)}
-button:disabled{opacity:.55;cursor:not-allowed;transform:none}
-input,select{width:100%;min-height:46px;padding:12px 14px;color:var(--text);background:#0a1325;border:1px solid var(--border);border-radius:11px;outline:none}
-input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #438cff20}
-input::placeholder{color:#647692}
-select option{background:#10182b}
-.hidden{display:none!important}
-.muted{color:var(--muted)}
-.secondary{background:#1b2942;border-color:var(--border);color:#dce7ff}
-.danger{background:#492338;border-color:#74334e;color:#ffb6c3}
-.empty{width:100%;padding:35px 15px;text-align:center;color:var(--muted);background:#111c30;border:1px dashed #34445f;border-radius:14px}
-.auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px;background:radial-gradient(circle at 50% 30%,#183a6b66,transparent 45%)}
-.auth-card{position:relative;overflow:hidden;width:100%;max-width:465px;padding:42px 38px;background:linear-gradient(145deg,#142541,#0b1427);border:1px solid #4d8bd544;border-radius:25px;box-shadow:0 30px 100px #0009,0 0 50px #438cff15;animation:appear .4s}
-.auth-card:before{content:"";position:absolute;height:3px;left:10%;right:10%;top:0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent)}
-.logo{text-align:center;font-size:32px;font-weight:900;margin-bottom:30px}
-.logo:before{content:"◈ ";color:var(--cyan)}
-.auth-card h1{text-align:center;font-size:28px;margin-bottom:10px}
-.auth-card>p{text-align:center;line-height:1.7;font-size:14px}
-.field{margin-top:18px}
-.field label{display:block;margin-bottom:8px;color:#c8d6ed;font-size:13px;font-weight:700}
-.auth-card input{height:52px}
-.auth-card form button{width:100%;min-height:52px;margin-top:25px;background:linear-gradient(110deg,#1679d7,#497ff5,#8868ee)}
-.auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
-.link-button{padding:7px 2px;color:var(--cyan);background:transparent;font-size:13px}
-.link-button:hover{background:transparent;box-shadow:none;text-decoration:underline}
-.auth-card:after{content:"🔒 SECURE ACCESS • TRUSTED WORKSPACE";display:block;margin-top:27px;padding-top:18px;border-top:1px solid var(--border);color:#8297b5;text-align:center;font-size:10px;letter-spacing:1.4px}
-.dashboard{min-height:100vh;max-width:1600px;margin:auto}
-.topbar{position:sticky;top:0;z-index:4;min-height:78px;padding:15px 32px;display:flex;justify-content:space-between;align-items:center;gap:15px;background:#0c1527ee;backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
-.brand{font-size:25px;font-weight:900}
-.brand:first-letter{color:var(--cyan)}
-.user-info{display:flex;align-items:center;gap:17px}
-#userEmail,#userRole{font-size:12px;color:var(--muted)}
-.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:25px;min-height:calc(100vh - 78px);padding:25px}
-.sidebar{position:sticky;top:103px;align-self:start;min-height:calc(100vh - 130px);padding:22px 14px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#121e34,#0d1729);border:1px solid var(--border);border-radius:var(--radius)}
-.sidebar-heading{margin:18px 10px 8px;color:#7186a7;font-size:10px;font-weight:800;letter-spacing:1.7px}
-.nav-btn{display:flex;align-items:center;gap:13px;width:100%;padding:13px 14px;color:#aabbd5;background:transparent;border:1px solid transparent;text-align:left;font-size:13px}
-.nav-btn span{width:22px;font-size:19px;text-align:center}
-.nav-btn:hover{color:white;background:#233653;box-shadow:none;transform:translateX(2px)}
-.nav-btn.active{color:white;background:linear-gradient(100deg,#246cce,#6559df);border-color:#80b1ff44}
-.sidebar-footer{margin-top:auto;padding:16px 10px 5px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}
-main{min-width:0;padding:5px 0}
-.heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin:8px 0 25px}
-.heading h1{margin-bottom:7px;font-size:27px}
-.heading p{font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-bottom:24px}
-.stat{padding:23px;background:linear-gradient(145deg,#172844,#101a2d);border:1px solid var(--border);border-radius:var(--radius)}
-.stat span{font-size:13px}
-.stat strong{display:block;margin-top:12px;font-size:30px}
-.panel{margin-bottom:22px;padding:23px;background:linear-gradient(145deg,#121f35,#0e182b);border:1px solid var(--border);border-radius:var(--radius)}
-.panel h2{font-size:18px;margin-bottom:17px}
-.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:16px}
-.doc-card{min-width:0;padding:19px;overflow-wrap:anywhere;background:linear-gradient(145deg,#192a45,#101b2f);border:1px solid var(--border);border-radius:15px}
-.doc-card h3{margin-bottom:13px;font-size:15px;line-height:1.5}
-.doc-meta{margin-bottom:16px;color:var(--muted);font-size:12px;line-height:1.9}
-.actions{display:flex;flex-wrap:wrap;gap:7px}
-.actions button{padding:8px 11px;font-size:11px}
-.toolbar{display:flex;gap:12px;margin-bottom:20px}
-.toolbar input{flex:1}
-.toolbar select{max-width:190px}
-.modal{position:fixed;inset:0;z-index:8;display:grid;place-items:center;padding:18px;background:#020611c9;backdrop-filter:blur(9px)}
-.modal-card{width:100%;max-width:470px;max-height:90vh;overflow-y:auto;padding:27px;background:linear-gradient(145deg,#172944,#0c1629);border:1px solid #5686c755;border-radius:20px}
-.modal-card h2{margin-bottom:20px;font-size:21px}
-.modal-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:22px}
-.toast{position:fixed;right:24px;bottom:24px;z-index:20;max-width:min(400px,calc(100vw - 35px));padding:15px 19px;color:white;background:#172c49;border:1px solid #438cff88;border-radius:13px;box-shadow:0 12px 35px #0008;animation:appear .25s}
-@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:850px){.layout{grid-template-columns:1fr;padding:15px}.sidebar{position:static;min-height:auto;flex-direction:row;flex-wrap:wrap}.sidebar-heading,.sidebar-footer{display:none}.nav-btn{width:auto;flex:1 1 130px;justify-content:center;padding:12px 9px}.nav-btn span{width:auto}}
-@media(max-width:600px){.topbar{padding:13px 15px;align-items:flex-start}.brand{font-size:21px}.user-info{gap:8px}.user-info button{padding:9px 11px;font-size:12px}.layout{padding:12px;gap:16px}.heading h1{font-size:23px}.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:17px}.stat strong{font-size:24px}.panel{padding:16px}.toolbar{flex-direction:column}.toolbar select{max-width:none}.doc-grid{grid-template-columns:1fr}.auth-card{padding:30px 22px}.auth-card h1{font-size:25px}.modal-card{padding:21px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
-
-#previewModal .modal-content {
-    width: min(900px, 95%);
-    max-height: 90vh;
-    overflow: auto;
-    background: #101b30;
-    padding: 20px;
-    border-radius: 14px;
+* {
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:Inter,"Segoe UI",Arial,sans-serif;
 }
-
-#previewContent {
-    margin-top: 18px;
-    min-height: 300px;
+body {
+ min-height:100vh;
+ color:var(--text);
+ background:radial-gradient(ellipse at 10% 0%,#14264a 0%,transparent 35%),
+ radial-gradient(ellipse at 95% 90%,#211747 0%,transparent 30%),var(--bg);
 }
-
-#previewContent iframe {
-    width: 100%;
-    height: 65vh;
-    border: none;
-    border-radius: 8px;
-    background: white;
+button,input,select {font:inherit}
+button {
+ cursor:pointer;
+ border:1px solid transparent;
+ border-radius:11px;
+ padding:11px 17px;
+ color:white;
+ font-weight:700;
+ background:linear-gradient(110deg,#2677e8,#795df0);
 }
-
-#previewContent img {
-    max-width: 100%;
-    max-height: 65vh;
-    display: block;
-    margin: auto;
-    border-radius: 8px;
+button:hover {filter:brightness(1.1)}
+button:disabled {opacity:.55;cursor:not-allowed}
+input,select {
+ width:100%;
+ min-height:46px;
+ padding:12px 14px;
+ color:var(--text);
+ background:#0a1325;
+ border:1px solid var(--border);
+ border-radius:11px;
+ outline:none;
 }
-
+input:focus,select:focus {border-color:var(--blue)}
+input::placeholder {color:#647692}
+select option {background:#10182b}
+.hidden {display:none!important}
+.muted {color:var(--muted)}
+.secondary {background:#1b2942;border-color:var(--border)}
+.danger {background:#492338;border-color:#74334e}
+.empty {
+ width:100%;
+ padding:35px 15px;
+ text-align:center;
+ color:var(--muted);
+ background:#111c30;
+ border:1px dashed #34445f;
+ border-radius:14px;
+}
+.auth-container {
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:25px;
+}
+.auth-card {
+ width:100%;
+ max-width:465px;
+ padding:42px 38px;
+ background:linear-gradient(145deg,#142541,#0b1427);
+ border:1px solid #4d8bd544;
+ border-radius:25px;
+ box-shadow:0 30px 100px #0009;
+}
+.logo {
+ text-align:center;
+ font-size:32px;
+ font-weight:900;
+ margin-bottom:30px;
+}
+.logo:before {content:"◈ ";color:var(--cyan)}
+.auth-card h1 {text-align:center;font-size:28px;margin-bottom:10px}
+.auth-card>p {text-align:center;line-height:1.7;font-size:14px}
+.field {margin-top:18px}
+.field label {
+ display:block;
+ margin-bottom:8px;
+ color:#c8d6ed;
+ font-size:13px;
+ font-weight:700;
+}
+.auth-card input {height:52px}
+.auth-card form button {width:100%;min-height:52px;margin-top:25px}
+.auth-links {display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.link-button {padding:7px 2px;color:var(--cyan);background:transparent;font-size:13px}
+.dashboard {min-height:100vh;max-width:1600px;margin:auto}
+.topbar {
+ position:sticky;
+ top:0;
+ z-index:4;
+ min-height:78px;
+ padding:15px 32px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ background:#0c1527ee;
+ border-bottom:1px solid var(--border);
+}
+.brand {font-size:25px;font-weight:900}
+.user-info {display:flex;align-items:center;gap:17px}
+#userEmail,#userRole {font-size:12px;color:var(--muted)}
+.layout {
+ display:grid;
+ grid-template-columns:250px minmax(0,1fr);
+ gap:25px;
+ min-height:calc(100vh - 78px);
+ padding:25px;
+}
+.sidebar {
+ position:sticky;
+ top:103px;
+ align-self:start;
+ min-height:calc(100vh - 130px);
+ padding:22px 14px;
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+ background:linear-gradient(180deg,#121e34,#0d1729);
+ border:1px solid var(--border);
+ border-radius:var(--radius);
+}
+.sidebar-heading {
+ margin:18px 10px 8px;
+ color:#7186a7;
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:1.7px;
+}
+.nav-btn {
+ display:flex;
+ align-items:center;
+ gap:13px;
+ width:100%;
+ padding:13px 14px;
+ color:#aabbd5;
+ background:transparent;
+ border:1px solid transparent;
+ text-align:left;
+ font-size:13px;
+}
+.nav-btn span {width:22px;font-size:19px;text-align:center}
+.nav-btn.active {color:white;background:linear-gradient(100deg,#246cce,#6559df)}
+.sidebar-footer {
+ margin-top:auto;
+ padding:16px 10px 5px;
+ border-top:1px solid var(--border);
+ color:var(--muted);
+ font-size:12px;
+}
+main {min-width:0;padding:5px 0}
+.heading {
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:15px;
+ margin:8px 0 25px;
+}
+.heading h1 {margin-bottom:7px;font-size:27px}
+.heading p {font-size:13px}
+.stats {
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:17px;
+ margin-bottom:24px;
+}
+.stat {
+ padding:23px;
+ background:linear-gradient(145deg,#172844,#101a2d);
+ border:1px solid var(--border);
+ border-radius:var(--radius);
+}
+.stat span {font-size:13px}
+.stat strong {display:block;margin-top:12px;font-size:30px}
+.panel {
+ margin-bottom:22px;
+ padding:23px;
+ background:linear-gradient(145deg,#121f35,#0e182b);
+ border:1px solid var(--border);
+ border-radius:var(--radius);
+}
+.panel h2 {font-size:18px;margin-bottom:17px}
+.doc-grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(225px,1fr));
+ gap:16px;
+}
+.doc-card {
+ min-width:0;
+ padding:19px;
+ overflow-wrap:anywhere;
+ background:linear-gradient(145deg,#192a45,#101b2f);
+ border:1px solid var(--border);
+ border-radius:15px;
+}
+.doc-card h3 {margin-bottom:13px;font-size:15px;line-height:1.5}
+.doc-meta {margin-bottom:16px;color:var(--muted);font-size:12px;line-height:1.9}
+.actions {display:flex;flex-wrap:wrap;gap:7px}
+.actions button {padding:8px 11px;font-size:11px}
+.toolbar {display:flex;gap:12px;margin-bottom:20px}
+.toolbar input {flex:1}
+.toolbar select {max-width:190px}
+.modal {
+ position:fixed;
+ inset:0;
+ z-index:8;
+ display:grid;
+ place-items:center;
+ padding:18px;
+ background:#020611c9;
+}
+.modal-card {
+ width:100%;
+ max-width:520px;
+ max-height:90vh;
+ overflow-y:auto;
+ padding:27px;
+ background:linear-gradient(145deg,#172944,#0c1629);
+ border:1px solid #5686c755;
+ border-radius:20px;
+}
+.modal-card h2 {margin-bottom:20px;font-size:21px}
+.modal-actions {
+ display:flex;
+ justify-content:flex-end;
+ flex-wrap:wrap;
+ gap:10px;
+ margin-top:22px;
+}
+.toast {
+ position:fixed;
+ right:24px;
+ bottom:24px;
+ z-index:20;
+ max-width:min(400px,calc(100vw - 35px));
+ padding:15px 19px;
+ color:white;
+ background:#172c49;
+ border:1px solid #438cff88;
+ border-radius:13px;
+}
+#previewContent {margin-top:18px;min-height:200px}
+#previewContent iframe {width:100%;height:65vh;border:0;background:white}
+#previewContent img {max-width:100%;max-height:65vh;display:block;margin:auto}
+@media(max-width:850px) {
+ .layout {grid-template-columns:1fr;padding:15px}
+ .sidebar {position:static;min-height:auto;flex-direction:row;flex-wrap:wrap}
+ .sidebar-heading,.sidebar-footer {display:none}
+ .nav-btn {width:auto;flex:1 1 130px;justify-content:center}
+}
+@media(max-width:600px) {
+ .topbar {padding:13px 15px;align-items:flex-start}
+ .brand {font-size:21px}
+ .user-info {gap:8px}
+ .layout {padding:12px;gap:16px}
+ .heading h1 {font-size:23px}
+ .stats {grid-template-columns:1fr 1fr;gap:10px}
+ .stat {padding:17px}
+ .stat strong {font-size:24px}
+ .panel {padding:16px}
+ .toolbar {flex-direction:column}
+ .toolbar select {max-width:none}
+ .doc-grid {grid-template-columns:1fr}
+ .auth-card {padding:30px 22px}
+ .modal-card {padding:21px}
+}
 </style>
 </head>
 
 <body>
 
+<!-- AUTHENTICATION -->
 <section id="authSection" class="auth-container">
- <div class="auth-card">
-  <div class="logo">TrustVault</div>
-  <h1 id="authTitle">Welcome Back</h1>
-  <p class="muted" id="authSubtitle">Sign in to your secure workspace.</p>
-  <form id="authForm">
-   <div class="field hidden" id="nameField"><label>Full Name</label><input id="fullName" placeholder="Enter your name" autocomplete="name"></div>
-   <div class="field"><label>Email Address</label><input id="email" type="email" placeholder="Enter email" autocomplete="email" required></div>
-   <div class="field"><label>Password</label><input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required></div>
-   <div class="field hidden" id="confirmField"><label>Confirm New Password</label><input id="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password"></div>
-   <button id="authButton" type="submit">Login</button>
-  </form>
-  <div class="auth-links">
-   <button class="link-button" id="modeButton" type="button">Create Account</button>
-   <button class="link-button" id="forgotButton" type="button">Forgot Password?</button>
-  </div>
- </div>
+<div class="auth-card">
+<div class="logo">TrustVault</div>
+<h1 id="authTitle">Welcome Back</h1>
+<p class="muted" id="authSubtitle">Sign in to your secure workspace.</p>
+
+<form id="authForm">
+<div class="field hidden" id="nameField">
+<label>Full Name</label>
+<input id="fullName" placeholder="Enter your name" autocomplete="name">
+</div>
+
+<div class="field">
+<label>Email Address</label>
+<input id="email" type="email" placeholder="Enter email" autocomplete="email" required>
+</div>
+
+<div class="field">
+<label>Password</label>
+<input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+</div>
+
+<div class="field hidden" id="confirmField">
+<label>Confirm New Password</label>
+<input id="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password">
+</div>
+
+<button id="authButton" type="submit">Login</button>
+</form>
+
+<div class="auth-links">
+<button class="link-button" id="modeButton" type="button">Create Account</button>
+<button class="link-button" id="forgotButton" type="button">Forgot Password?</button>
+</div>
+</div>
 </section>
 
+<!-- DASHBOARD -->
 <section id="dashboard" class="dashboard hidden">
- <header class="topbar">
-  <div class="brand">⬡ TrustVault</div>
-  <div class="user-info">
-   <div><strong id="userName">User</strong><div id="userEmail"></div><small id="userRole"></small></div>
-   <button class="secondary" id="logoutButton">Logout</button>
-  </div>
- </header>
- <div class="layout">
-  <aside class="sidebar">
-   <div class="sidebar-heading">WORKSPACE</div>
-   <button class="nav-btn active" data-page="overview"><span>⌂</span>Dashboard</button>
-   <button class="nav-btn" data-page="documents"><span>▤</span>My Documents</button>
-   <button class="nav-btn" data-page="shared"><span>⇄</span>Shared With Me</button>
-   <div class="sidebar-heading">MANAGEMENT</div>
-   <button class="nav-btn" data-page="activity"><span>◷</span>Activity Logs</button>
-   <button class="nav-btn hidden" id="adminNav" data-page="users"><span>♙</span>User Management</button>
-   <div class="sidebar-footer">🔒 Secure Workspace</div>
-  </aside>
-  <main>
-   <section id="page-overview">
-    <div class="heading"><div><h1>Dashboard</h1><p class="muted">Welcome to your secure vault.</p></div><button id="uploadOpen">+ Upload Document</button></div>
-    <div class="stats">
-     <div class="stat"><span class="muted">Documents</span><strong id="totalCount">0</strong></div>
-     <div class="stat"><span class="muted">My Documents</span><strong id="ownedCount">0</strong></div>
-     <div class="stat"><span class="muted">My Role</span><strong id="roleCount">Viewer</strong></div>
-    </div>
-    <div class="panel"><h2>Recent Documents</h2><div id="recentDocuments" class="doc-grid"></div></div>
-   </section>
-   <section id="page-documents" class="hidden">
-    <div class="heading"><h1>Documents</h1><button id="uploadOpen2">+ Upload</button></div>
-    <div class="panel">
-     
-<div class="toolbar">
-    <input id="documentSearch" placeholder="Search documents...">
 
-    <select id="categoryFilter">
-        <option value="">All Categories</option>
-        <option>Academic</option>
-        <option>Personal</option>
-        <option>Work</option>
-        <option>Legal</option>
-        <option>Other</option>
-    </select>
+<header class="topbar">
+<div class="brand">⬡ TrustVault</div>
+<div class="user-info">
+<div>
+<strong id="userName">User</strong>
+<div id="userEmail"></div>
+<small id="userRole"></small>
+</div>
+<button class="secondary" id="logoutButton">Logout</button>
+</div>
+</header>
 
-    <select id="documentSort">
-        <option value="newest">Newest First</option>
-        <option value="oldest">Oldest First</option>
-        <option value="name">Name A-Z</option>
-    </select>
+<div class="layout">
+
+<aside class="sidebar">
+<div class="sidebar-heading">WORKSPACE</div>
+<button class="nav-btn active" data-page="overview"><span>⌂</span>Dashboard</button>
+<button class="nav-btn" data-page="documents"><span>▤</span>My Documents</button>
+<button class="nav-btn" data-page="shared"><span>⇄</span>Shared With Me</button>
+<div class="sidebar-heading">MANAGEMENT</div>
+<button class="nav-btn" data-page="activity"><span>◷</span>Activity Logs</button>
+<button class="nav-btn hidden" id="adminNav" data-page="users"><span>♙</span>User Management</button>
+<div class="sidebar-footer">🔒 Secure Workspace</div>
+</aside>
+
+<main>
+
+<section id="page-overview">
+<div class="heading">
+<div>
+<h1>Dashboard</h1>
+<p class="muted">Welcome to your secure vault.</p>
+</div>
+<button id="uploadOpen">+ Upload Document</button>
 </div>
 
-     <div id="myDocuments" class="doc-grid"></div>
-    </div>
-   </section>
-   <section id="page-shared" class="hidden"><div class="heading"><h1>Shared With Me</h1></div><div class="panel"><div id="sharedDocuments" class="doc-grid"></div></div></section>
-   <section id="page-activity" class="hidden"><div class="heading"><h1>Activity Logs</h1></div><div class="panel"><div id="activityList"></div></div></section>
-   <section id="page-users" class="hidden"><div class="heading"><h1>User Management</h1></div><div class="panel"><div id="usersList"></div></div></section>
-  </main>
- </div>
+<div class="stats">
+<div class="stat"><span class="muted">Documents</span><strong id="totalCount">0</strong></div>
+<div class="stat"><span class="muted">My Documents</span><strong id="ownedCount">0</strong></div>
+<div class="stat"><span class="muted">My Role</span><strong id="roleCount">Viewer</strong></div>
+</div>
+
+<div class="panel">
+<h2>Recent Documents</h2>
+<div id="recentDocuments" class="doc-grid"></div>
+</div>
 </section>
 
-<div id="uploadModal" class="modal hidden">
- <div class="modal-card">
-  <h2>Upload / Update Document</h2>
+<section id="page-documents" class="hidden">
+<div class="heading">
+<h1>Documents</h1>
+<button id="uploadOpen2">+ Upload</button>
+</div>
+<div class="panel">
+<div class="toolbar">
+<input id="documentSearch" placeholder="Search documents...">
+<select id="categoryFilter">
+<option value="">All Categories</option>
+<option>Academic</option>
+<option>Personal</option>
+<option>Work</option>
+<option>Legal</option>
+<option>Other</option>
+</select>
+<select id="documentSort">
+<option value="newest">Newest First</option>
+<option value="oldest">Oldest First</option>
+<option value="name">Name A-Z</option>
+</select>
+</div>
+<div id="myDocuments" class="doc-grid"></div>
+</div>
+</section>
 
-  <form id="uploadForm">
+<section id="page-shared" class="hidden">
+<div class="heading"><h1>Shared With Me</h1></div>
+<div class="panel"><div id="sharedDocuments" class="doc-grid"></div></div>
+</section>
 
-   <div class="field">
-    <label>Action</label>
-    <select id="uploadAction">
-     <option value="new">Upload New Document</option>
-     <option value="update">Update Existing Document</option>
-    </select>
-   </div>
-
-   <div class="field hidden" id="existingDocumentField">
-    <label>Select Existing Document</label>
-    <select id="existingDocumentSelect">
-     <option value="">Select Document</option>
-    </select>
-   </div>
-
-   <div class="field">
-    <label>Document Title</label>
-    <input id="fileTitle" required>
-   </div>
-
-   <div class="field">
-    <label>Category</label>
-    <select id="fileCategory">
-     <option>Academic</option>
-     <option>Personal</option>
-     <option>Work</option>
-     <option>Legal</option>
-     <option>Other</option>
-    </select>
-   </div>
-
-   <div class="field">
-    <label>Select File</label>
-    <input id="fileInput" type="file" required>
-   </div>
-
-   <div class="modal-actions">
-    <button type="button" class="secondary"
-     data-close="uploadModal">Cancel</button>
-
-    <button type="submit">Continue</button>
-   </div>
-
-  </form>
- </div>
+<!-- ACTIVITY LOGS: SINGLE CLEAN SECTION -->
+<section id="page-activity" class="hidden">
+<div class="heading">
+<div>
+<h1>Activity Logs</h1>
+<p class="muted">Monitor document activity and security events.</p>
+</div>
 </div>
 
+<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+<div class="stat"><span>Total Activities</span><strong id="totalActivities">0</strong></div>
+<div class="stat"><span>Uploads</span><strong id="totalUploads">0</strong></div>
+<div class="stat"><span>Downloads</span><strong id="totalDownloads">0</strong></div>
+<div class="stat"><span>Access Denied</span><strong id="totalDenied">0</strong></div>
+</div>
+
+<div class="panel">
+<div class="toolbar">
+<input id="activitySearch" placeholder="Search username, action or details..." oninput="filterActivityLogs()">
+<select id="activityFilter" onchange="filterActivityLogs()">
+<option value="all">All Activities</option>
+<option value="upload">Upload</option>
+<option value="download">Download</option>
+<option value="update">Update</option>
+<option value="delete">Delete</option>
+<option value="permission_granted">Permission Granted</option>
+<option value="permission_revoked">Permission Revoked</option>
+<option value="access_denied">Access Denied</option>
+</select>
+<input type="date" id="activityDate" onchange="filterActivityLogs()">
+<button type="button" onclick="clearActivityFilters()">Clear</button>
+</div>
+<div id="activityList"></div>
+</div>
+</section>
+
+<section id="page-users" class="hidden">
+<div class="heading"><h1>User Management</h1></div>
+<div class="panel"><div id="usersList"></div></div>
+</section>
+
+</main>
+</div>
+</section>
+
+<!-- UPLOAD MODAL -->
+<div id="uploadModal" class="modal hidden">
+<div class="modal-card">
+<h2>Upload / Update Document</h2>
+<form id="uploadForm">
+
+<div class="field">
+<label>Action</label>
+<select id="uploadAction">
+<option value="new">Upload New Document</option>
+<option value="update">Update Existing Document</option>
+</select>
+</div>
+
+<div class="field hidden" id="existingDocumentField">
+<label>Select Existing Document</label>
+<select id="existingDocumentSelect">
+<option value="">Select Document</option>
+</select>
+</div>
+
+<div class="field">
+<label>Document Title</label>
+<input id="fileTitle" required>
+</div>
+
+<div class="field">
+<label>Category</label>
+<select id="fileCategory">
+<option>Academic</option>
+<option>Personal</option>
+<option>Work</option>
+<option>Legal</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Select File</label>
+<input id="fileInput" type="file" required>
+</div>
+
+<div class="modal-actions">
+<button type="button" class="secondary" data-close="uploadModal">Cancel</button>
+<button type="submit">Continue</button>
+</div>
+
+</form>
+</div>
+</div>
+
+<!-- SHARE MODAL -->
 <div id="shareModal" class="modal hidden">
- <div class="modal-card"><h2>Share Document</h2>
-  <form id="shareForm">
-   <input type="hidden" id="shareDocumentId">
-   <div class="field"><label>Recipient Email</label><input id="shareEmail" type="email" required></div>
-   <div class="field"><label>Permission</label><select id="sharePermission"><option value="read">Read</option><option value="edit">Edit</option></select></div>
-   <div class="modal-actions"><button type="button" class="secondary" data-close="shareModal">Cancel</button><button type="submit">Grant Access</button></div>
-  </form>
-  <br><h3>Current Permissions</h3><div id="permissionList"></div>
- </div>
+<div class="modal-card">
+<h2>Share Document</h2>
+<form id="shareForm">
+<input type="hidden" id="shareDocumentId">
+<div class="field">
+<label>Recipient Email</label>
+<input id="shareEmail" type="email" required>
+</div>
+<div class="field">
+<label>Permission</label>
+<select id="sharePermission">
+<option value="read">Read</option>
+<option value="edit">Edit</option>
+</select>
+</div>
+<div class="modal-actions">
+<button type="button" class="secondary" data-close="shareModal">Cancel</button>
+<button type="submit">Grant Access</button>
+</div>
+</form>
+<br>
+<h3>Current Permissions</h3>
+<div id="permissionList"></div>
+</div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div id="previewModal" class="modal hidden">
+<div class="modal-card">
+<div class="heading">
+<h2 id="previewTitle">Document Preview</h2>
+<button type="button" onclick="closePreview()">✕</button>
+</div>
+<div id="previewContent"></div>
+</div>
 </div>
 
 <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
@@ -273,430 +557,418 @@ main{min-width:0;padding:5px 0}
 <script>
 "use strict";
 
-// SUPABASE CONFIGURATION
+/* SUPABASE CONFIGURATION */
 const SUPABASE_URL = "https://lkgwzavjyfqgylpparhe.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SRROVwa_Wemf5wLDncg61w_dzCJV_xb";
 const BUCKET = "trustvault-documents";
 
 if (!window.supabase) {
- alert("Supabase library failed to load. Check your internet connection and refresh.");
- throw new Error("Supabase library not loaded.");
+    alert("Supabase library failed to load. Check internet and refresh.");
+    throw new Error("Supabase library not loaded.");
 }
+
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// GLOBAL VARIABLES
+/* GLOBAL VARIABLES */
 let currentUser = null;
 let currentProfile = null;
 let authMode = "login";
-let recoveryMode = false;
 let allDocuments = [];
 let sharedDocumentsData = [];
+let activityLogsCache = [];
 let toastTimer = null;
+let previewObjectURL = null;
 
 function $(id) {
- return document.getElementById(id);
-}
-
-function showToast(message) {
- const toast = $("toast");
- toast.textContent = String(message);
- toast.classList.remove("hidden");
- clearTimeout(toastTimer);
- toastTimer = setTimeout(() => toast.classList.add("hidden"), 4500);
-}
-
-function showAuth() {
- $("authSection").classList.remove("hidden");
- $("dashboard").classList.add("hidden");
-}
-
-function showDashboard() {
- $("authSection").classList.add("hidden");
- $("dashboard").classList.remove("hidden");
+    return document.getElementById(id);
 }
 
 function escapeHTML(value) {
- return String(value ?? "").replace(/[&<>"']/g, c => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
- }[c]));
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    }[c]));
 }
 
 function formatDate(value) {
- if (!value) return "-";
- const date = new Date(value);
- return Number.isNaN(date.getTime()) ? "-" : date.toLocaleString();
+    if (!value) return "-";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "-" : date.toLocaleString();
+}
+
+function showToast(message) {
+    const toast = $("toast");
+    toast.textContent = String(message);
+    toast.classList.remove("hidden");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add("hidden"), 4500);
+}
+
+function showAuth() {
+    $("authSection").classList.remove("hidden");
+    $("dashboard").classList.add("hidden");
+}
+
+function showDashboard() {
+    $("authSection").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
 }
 
 function isAdmin() {
- return currentProfile?.role === "admin";
+    return currentProfile?.role === "admin";
 }
 
 function canManageDocument(doc) {
- return Boolean(currentUser && (isAdmin() || doc.owner_id === currentUser.id));
+    return Boolean(currentUser && (isAdmin() || doc.owner_id === currentUser.id));
 }
 
-// AUTH MODES
+/* AUTH MODES */
 function setAuthMode(mode) {
- authMode = mode;
+    authMode = mode;
 
- const titles = {
-  login:"Welcome Back",
-  register:"Create Account",
-  forgot:"Forgot Password",
-  recovery:"Set New Password"
- };
- const subtitles = {
-  login:"Sign in to your secure workspace.",
-  register:"Register for your TrustVault account.",
-  forgot:"Enter your email to receive a reset link.",
-  recovery:"Enter and confirm your new password."
- };
- const buttons = {
-  login:"Login",
-  register:"Register",
-  forgot:"Send Reset Link",
-  recovery:"Update Password"
- };
+    const titles = {
+        login:"Welcome Back",
+        register:"Create Account",
+        forgot:"Forgot Password",
+        recovery:"Set New Password"
+    };
 
- $("authTitle").textContent = titles[mode];
- $("authSubtitle").textContent = subtitles[mode];
- $("authButton").textContent = buttons[mode];
+    const subtitles = {
+        login:"Sign in to your secure workspace.",
+        register:"Register for your TrustVault account.",
+        forgot:"Enter your email to receive a reset link.",
+        recovery:"Enter and confirm your new password."
+    };
 
- $("nameField").classList.toggle("hidden", mode !== "register");
- $("confirmField").classList.toggle("hidden", mode !== "recovery");
- $("forgotButton").classList.toggle("hidden", mode !== "login");
+    const buttons = {
+        login:"Login",
+        register:"Register",
+        forgot:"Send Reset Link",
+        recovery:"Update Password"
+    };
 
- $("modeButton").classList.toggle("hidden", mode === "recovery");
- $("modeButton").textContent =
-  mode === "login" ? "Create Account" :
-  mode === "register" ? "Already have an account? Login" :
-  "Back to Login";
+    $("authTitle").textContent = titles[mode];
+    $("authSubtitle").textContent = subtitles[mode];
+    $("authButton").textContent = buttons[mode];
 
- $("password").required = mode !== "forgot";
- $("confirmPassword").required = mode === "recovery";
- $("fullName").required = mode === "register";
+    $("nameField").classList.toggle("hidden", mode !== "register");
+    $("confirmField").classList.toggle("hidden", mode !== "recovery");
+    $("forgotButton").classList.toggle("hidden", mode !== "login");
+    $("modeButton").classList.toggle("hidden", mode === "recovery");
 
- $("password").value = "";
- $("confirmPassword").value = "";
+    $("modeButton").textContent =
+        mode === "login" ? "Create Account" :
+        mode === "register" ? "Already have an account? Login" :
+        "Back to Login";
 
- $("password").autocomplete =
-  mode === "login" ? "current-password" : "new-password";
+    $("password").required = mode !== "forgot";
+    $("confirmPassword").required = mode === "recovery";
+    $("fullName").required = mode === "register";
 
- if (mode === "recovery") {
-  $("email").readOnly = true;
- } else {
-  $("email").readOnly = false;
- }
+    $("password").value = "";
+    $("confirmPassword").value = "";
+    $("email").readOnly = mode === "recovery";
+
+    $("password").autocomplete =
+        mode === "login" ? "current-password" : "new-password";
 }
 
-// LOGIN / REGISTER / RESET PASSWORD
+/* LOGIN / REGISTER / RESET */
 $("authForm").addEventListener("submit", async event => {
- event.preventDefault();
+    event.preventDefault();
 
- const button = $("authButton");
- const email = $("email").value.trim();
- const password = $("password").value;
+    const button = $("authButton");
+    const email = $("email").value.trim();
+    const password = $("password").value;
 
- if (!email) {
-  showToast("Please enter your email address.");
-  return;
- }
-
- button.disabled = true;
-
- try {
-  if (authMode === "login") {
-   const { data, error } = await db.auth.signInWithPassword({
-    email,
-    password
-   });
-
-   if (error) throw error;
-   if (!data.user) throw new Error("Login failed. User not found.");
-
-   currentUser = data.user;
-   await startApp();
-
-  } else if (authMode === "register") {
-   const fullName = $("fullName").value.trim();
-
-   if (!fullName) throw new Error("Please enter your full name.");
-   if (password.length < 6) throw new Error("Password must be at least 6 characters.");
-
-   const { data, error } = await db.auth.signUp({
-    email,
-    password,
-    options: {
-     data: { full_name: fullName }
+    if (!email) {
+        showToast("Please enter your email address.");
+        return;
     }
-   });
 
-   if (error) throw error;
+    button.disabled = true;
 
-   if (data.session && data.user) {
-    currentUser = data.user;
-    await startApp();
-   } else {
-    showToast("Registration submitted. Check your email to verify your account.");
-    $("password").value = "";
-    setAuthMode("login");
-   }
+    try {
+        if (authMode === "login") {
+            const { data, error } = await db.auth.signInWithPassword({
+                email,
+                password
+            });
 
-  } else if (authMode === "forgot") {
-   const { error } = await db.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://trustvault-seven-eta.vercel.app/"
-   });
+            if (error) throw error;
+            if (!data.user) throw new Error("Login failed.");
 
-   if (error) throw error;
+            currentUser = data.user;
+            await startApp();
 
-   showToast("Password reset link sent. Check your email.");
-   setAuthMode("login");
+        } else if (authMode === "register") {
+            const fullName = $("fullName").value.trim();
 
-  } else if (authMode === "recovery") {
-   const confirmPassword = $("confirmPassword").value;
+            if (!fullName) throw new Error("Enter your full name.");
+            if (password.length < 6) throw new Error("Password must be at least 6 characters.");
 
-   if (password.length < 6) throw new Error("Password must be at least 6 characters.");
-   if (password !== confirmPassword) throw new Error("Passwords do not match.");
+            const { data, error } = await db.auth.signUp({
+                email,
+                password,
+                options: { data: { full_name: fullName } }
+            });
 
-   const { error } = await db.auth.updateUser({ password });
+            if (error) throw error;
 
-   if (error) throw error;
+            if (data.session && data.user) {
+                currentUser = data.user;
+                await startApp();
+            } else {
+                showToast("Registration submitted. Check your email to verify.");
+                setAuthMode("login");
+            }
 
-   recoveryMode = false;
-   showToast("Password updated successfully. Please login.");
+        } else if (authMode === "forgot") {
+            const { error } = await db.auth.resetPasswordForEmail(email, {
+                redirectTo: "https://trustvault-seven-eta.vercel.app/"
+            });
 
-   await db.auth.signOut();
-   setAuthMode("login");
-  }
+            if (error) throw error;
 
- } catch (error) {
-  console.error("Authentication error:", error);
-  showToast(error.message || "Authentication failed.");
- } finally {
-  button.disabled = false;
- }
+            showToast("Password reset link sent.");
+            setAuthMode("login");
+
+        } else if (authMode === "recovery") {
+            const confirmPassword = $("confirmPassword").value;
+
+            if (password.length < 6) throw new Error("Password must be at least 6 characters.");
+            if (password !== confirmPassword) throw new Error("Passwords do not match.");
+
+            const { error } = await db.auth.updateUser({ password });
+
+            if (error) throw error;
+
+            await db.auth.signOut();
+            setAuthMode("login");
+            showToast("Password updated. Please login.");
+        }
+
+    } catch (error) {
+        console.error("Authentication error:", error);
+        showToast(error.message || "Authentication failed.");
+    } finally {
+        button.disabled = false;
+    }
 });
 
 $("modeButton").addEventListener("click", () => {
- setAuthMode(authMode === "login" ? "register" : "login");
+    setAuthMode(authMode === "login" ? "register" : "login");
 });
 
 $("forgotButton").addEventListener("click", () => setAuthMode("forgot"));
 
-// AUTH STATE LISTENER
+/* AUTH STATE */
 db.auth.onAuthStateChange((event, session) => {
- if (event === "PASSWORD_RECOVERY") {
-  recoveryMode = true;
-  if (session?.user) {
-   currentUser = session.user;
-   $("email").value = session.user.email || "";
-  }
-  setAuthMode("recovery");
-  showAuth();
- }
+    if (event === "PASSWORD_RECOVERY") {
+        if (session?.user) {
+            currentUser = session.user;
+            $("email").value = session.user.email || "";
+        }
 
- if (event === "SIGNED_OUT") {
-  currentUser = null;
-  currentProfile = null;
-  allDocuments = [];
-  sharedDocumentsData = [];
-  showAuth();
- }
+        setAuthMode("recovery");
+        showAuth();
+    }
+
+    if (event === "SIGNED_OUT") {
+        currentUser = null;
+        currentProfile = null;
+        allDocuments = [];
+        sharedDocumentsData = [];
+        showAuth();
+    }
 });
 
-// PROFILE
+/* PROFILE */
 async function loadProfile() {
- if (!currentUser?.id) {
-  throw new Error("No authenticated user found.");
- }
+    if (!currentUser?.id) throw new Error("No authenticated user.");
 
- const { data, error } = await db
-  .from("profiles")
-  .select("*")
-  .eq("id", currentUser.id)
-  .single();
+    const { data, error } = await db
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .single();
 
- if (error) throw error;
- if (!data) throw new Error("User profile not found.");
+    if (error) throw error;
+    if (!data) throw new Error("User profile not found.");
 
- currentProfile = data;
+    currentProfile = data;
 
- $("userName").textContent = data.full_name || currentUser.email || "User";
- $("userEmail").textContent = currentUser.email || "";
- $("userRole").textContent = "Role: " + (data.role || "viewer");
- $("roleCount").textContent = data.role || "viewer";
+    $("userName").textContent = data.full_name || currentUser.email || "User";
+    $("userEmail").textContent = currentUser.email || "";
+    $("userRole").textContent = "Role: " + (data.role || "viewer");
+    $("roleCount").textContent = data.role || "viewer";
 
- $("adminNav").classList.toggle("hidden", !isAdmin());
+    $("adminNav").classList.toggle("hidden", !isAdmin());
 }
 
-// START APPLICATION
+/* START APPLICATION */
 async function startApp() {
- try {
-  const { data, error } = await db.auth.getUser();
+    try {
+        const { data, error } = await db.auth.getUser();
 
-  if (error) throw error;
+        if (error) throw error;
 
-  if (!data.user) {
-   currentUser = null;
-   currentProfile = null;
-   showAuth();
-   return;
-  }
+        if (!data.user) {
+            currentUser = null;
+            currentProfile = null;
+            showAuth();
+            return;
+        }
 
-  currentUser = data.user;
+        currentUser = data.user;
 
-  await loadProfile();
+        await loadProfile();
 
-  showDashboard();
-  showPage("overview");
-  await renderAll();
+        showDashboard();
+        showPage("overview");
+        await renderAll();
 
-  showToast("Welcome to TrustVault!");
+        showToast("Welcome to TrustVault!");
 
- } catch (error) {
-  console.error("Application startup error:", error);
-  currentProfile = null;
-  showAuth();
-  showToast("Unable to load your profile: " + error.message);
- }
+    } catch (error) {
+        console.error("Application startup error:", error);
+        currentProfile = null;
+        showAuth();
+        showToast("Unable to load profile: " + error.message);
+    }
 }
 
-// LOGOUT
+/* LOGOUT */
 $("logoutButton").addEventListener("click", async () => {
- const button = $("logoutButton");
- button.disabled = true;
+    const button = $("logoutButton");
+    button.disabled = true;
 
- try {
-  const { error } = await db.auth.signOut();
-  if (error) throw error;
+    try {
+        const { error } = await db.auth.signOut();
+        if (error) throw error;
 
-  currentUser = null;
-  currentProfile = null;
-  allDocuments = [];
-  sharedDocumentsData = [];
+        currentUser = null;
+        currentProfile = null;
+        allDocuments = [];
+        sharedDocumentsData = [];
 
-  setAuthMode("login");
-  showAuth();
-  showToast("Logged out successfully.");
+        setAuthMode("login");
+        showAuth();
+        showToast("Logged out successfully.");
 
- } catch (error) {
-  showToast("Logout failed: " + error.message);
- } finally {
-  button.disabled = false;
- }
+    } catch (error) {
+        showToast("Logout failed: " + error.message);
+    } finally {
+        button.disabled = false;
+    }
 });
 
-// RESTORE SESSION
+/* RESTORE SESSION */
 async function initializeAuth() {
- try {
-  showAuth();
+    try {
+        showAuth();
 
-  const { data, error } = await db.auth.getSession();
+        const { data, error } = await db.auth.getSession();
+        if (error) throw error;
 
-  if (error) throw error;
+        if (data.session?.user) {
+            currentUser = data.session.user;
+            await startApp();
+        }
 
-  if (!data.session?.user) {
-   currentUser = null;
-   currentProfile = null;
-   showAuth();
-   return;
-  }
-
-  currentUser = data.session.user;
-  await startApp();
-
- } catch (error) {
-  console.error("Session initialization error:", error);
-  currentUser = null;
-  currentProfile = null;
-  showAuth();
-  showToast("Unable to restore session. Please login.");
- }
+    } catch (error) {
+        console.error("Session initialization error:", error);
+        showAuth();
+        showToast("Unable to restore session. Please login.");
+    }
 }
 
-// DOCUMENTS
+/* DOCUMENTS */
 async function loadDocuments() {
- if (!currentUser?.id) throw new Error("Please login first.");
+    if (!currentUser?.id) throw new Error("Please login first.");
 
- const { data, error } = await db
-  .from("documents")
-  .select("*")
-  .order("created_at", { ascending: false });
+    const { data, error } = await db
+        .from("documents")
+        .select("*")
+        .order("created_at", { ascending: false });
 
- if (error) throw error;
+    if (error) throw error;
 
- allDocuments = data || [];
+    allDocuments = data || [];
 
- const { data: permissions, error: permissionError } = await db
-  .from("document_permissions")
-  .select("document_id")
-  .eq("grantee_id", currentUser.id);
+    const { data: permissions, error: permissionError } = await db
+        .from("document_permissions")
+        .select("document_id")
+        .eq("grantee_id", currentUser.id);
 
- if (permissionError) {
-  console.error("Permission loading error:", permissionError);
-  sharedDocumentsData = [];
- } else {
-  const sharedIds = (permissions || []).map(p => p.document_id);
+    if (permissionError) {
+        console.error(permissionError);
+        sharedDocumentsData = [];
+    } else {
+        const ids = (permissions || []).map(p => p.document_id);
 
-  sharedDocumentsData = allDocuments.filter(doc =>
-   sharedIds.includes(doc.id) && doc.owner_id !== currentUser.id
-  );
- }
+        sharedDocumentsData = allDocuments.filter(doc =>
+            ids.includes(doc.id) && doc.owner_id !== currentUser.id
+        );
+    }
 }
 
 async function renderAll() {
- if (!currentUser?.id) return;
+    if (!currentUser?.id) return;
 
- await loadDocuments();
+    await loadDocuments();
 
- const myDocs = allDocuments.filter(doc => canManageDocument(doc));
+    const myDocs = allDocuments.filter(doc => canManageDocument(doc));
 
- $("totalCount").textContent = allDocuments.length;
- $("ownedCount").textContent =
-  myDocs.filter(doc => doc.owner_id === currentUser.id).length;
+    $("totalCount").textContent = allDocuments.length;
+    $("ownedCount").textContent =
+        myDocs.filter(doc => doc.owner_id === currentUser.id).length;
 
- filterDocuments();
- renderFiles("recentDocuments", myDocs.slice(0, 4));
- renderFiles("sharedDocuments", sharedDocumentsData);
+    filterDocuments();
+    renderFiles("recentDocuments", myDocs.slice(0, 4));
+    renderFiles("sharedDocuments", sharedDocumentsData);
 }
 
 function renderFiles(containerId, documents) {
- const container = $(containerId);
- if (!container) return;
+    const container = $(containerId);
+    if (!container) return;
 
- if (!documents.length) {
-  container.innerHTML = '<div class="empty">No documents found.</div>';
-  return;
- }
+    if (!documents.length) {
+        container.innerHTML = '<div class="empty">No documents found.</div>';
+        return;
+    }
 
- container.innerHTML = documents.map(doc => {
-  const owner = canManageDocument(doc);
-  const safeId = escapeHTML(doc.id);
+    container.innerHTML = documents.map(doc => {
+        const owner = canManageDocument(doc);
+        const id = escapeHTML(doc.id);
 
-  return `
-   <div class="doc-card">
-    <h3>📄 ${escapeHTML(doc.title || "Untitled")}</h3>
-    <div class="doc-meta">
-     Category: ${escapeHTML(doc.category || "Other")}<br>
-     Uploaded: ${escapeHTML(formatDate(doc.created_at))}<br>
-     ${doc.owner_id === currentUser.id ? "Your document" : "Shared document"}
-    </div>
-    <div class="actions">
-     <button onclick="previewFile('${safeId}')">Preview</button>
-<button onclick="downloadFile('${safeId}')">Download</button>
-     ${owner ? `
-      <button class="secondary" onclick="renameFile('${safeId}')">Rename</button>
-      <button class="secondary" onclick="shareFile('${safeId}')">Share</button>
-      <button class="danger" onclick="deleteFile('${safeId}')">Delete</button>
-     ` : ""}
-    </div>
-   </div>`;
- }).join("");
+        return `
+        <div class="doc-card">
+            <h3>📄 ${escapeHTML(doc.title || "Untitled")}</h3>
+            <div class="doc-meta">
+                Category: ${escapeHTML(doc.category || "Other")}<br>
+                Uploaded: ${escapeHTML(formatDate(doc.created_at))}<br>
+                ${doc.owner_id === currentUser.id ? "Your document" : "Shared document"}
+            </div>
+            <div class="actions">
+                <button onclick="previewFile('${id}')">Preview</button>
+                <button onclick="downloadFile('${id}')">Download</button>
+                ${owner ? `
+                    <button class="secondary" onclick="renameFile('${id}')">Rename</button>
+                    <button class="secondary" onclick="shareFile('${id}')">Share</button>
+                    <button class="danger" onclick="deleteFile('${id}')">Delete</button>
+                ` : ""}
+            </div>
+        </div>`;
+    }).join("");
 }
 
-// PAGE NAVIGATION
+/* PAGE NAVIGATION */
 function showPage(page) {
-    const pages = ["overview", "documents", "shared", "activity", "users"];
+    const pages = ["overview","documents","shared","activity","users"];
 
     if (!pages.includes(page)) return;
 
@@ -723,12 +995,10 @@ function showPage(page) {
 }
 
 document.querySelectorAll(".nav-btn").forEach(button => {
-    button.addEventListener("click", () => {
-        showPage(button.dataset.page);
-    });
+    button.addEventListener("click", () => showPage(button.dataset.page));
 });
 
-// MODALS
+/* MODALS - ONLY ONE DEFINITION */
 function openModal(id) {
     if (!currentUser) {
         showToast("Please login first.");
@@ -750,38 +1020,11 @@ document.querySelectorAll("[data-close]").forEach(button => {
 
 document.querySelectorAll(".modal").forEach(modal => {
     modal.addEventListener("click", event => {
-        if (event.target === modal) {
-            modal.classList.add("hidden");
-        }
+        if (event.target === modal) modal.classList.add("hidden");
     });
 });
 
-// MODALS
-function openModal(id) {
- if (!currentUser) {
-  showToast("Please login first.");
-  return;
- }
- $(id).classList.remove("hidden");
-}
-
-function closeModal(id) {
- $(id).classList.add("hidden");
-}
-
-$("uploadOpen").addEventListener("click", () => openModal("uploadModal"));
-$("uploadOpen2").addEventListener("click", () => openModal("uploadModal"));
-
-document.querySelectorAll("[data-close]").forEach(button => {
- button.addEventListener("click", () => closeModal(button.dataset.close));
-});
-
-document.querySelectorAll(".modal").forEach(modal => {
- modal.addEventListener("click", event => {
-  if (event.target === modal) modal.classList.add("hidden");
- });
-});
-// UPLOAD DOCUMENT + VERSION HISTORY
+/* UPLOAD / UPDATE DOCUMENT */
 $("uploadForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
@@ -837,7 +1080,6 @@ $("uploadForm").addEventListener("submit", async function(event) {
                 .single();
 
             if (error) throw error;
-
             documentId = data.id;
 
         } else {
@@ -849,6 +1091,7 @@ $("uploadForm").addEventListener("submit", async function(event) {
                 .single();
 
             if (error) throw error;
+
             oldDocument = data;
             documentId = data.id;
         }
@@ -870,8 +1113,7 @@ $("uploadForm").addEventListener("submit", async function(event) {
 
             if (versionReadError) throw versionReadError;
 
-            const nextVersion =
-                (versions?.[0]?.version_number || 1) + 1;
+            const nextVersion = (versions?.[0]?.version_number || 1) + 1;
 
             const { error: versionError } = await db
                 .from("document_versions")
@@ -913,11 +1155,9 @@ $("uploadForm").addEventListener("submit", async function(event) {
         closeModal("uploadModal");
         await renderAll();
 
-        showToast(
-            action === "update"
-                ? "New version uploaded successfully!"
-                : "Document uploaded successfully!"
-        );
+        showToast(action === "update"
+            ? "New version uploaded successfully!"
+            : "Document uploaded successfully!");
 
     } catch (error) {
         console.error("Upload/version error:", error);
@@ -930,7 +1170,7 @@ $("uploadForm").addEventListener("submit", async function(event) {
             await db.storage.from(BUCKET).remove([storagePath]);
         }
 
-        if (versionInserted) {
+        if (versionInserted && oldDocument) {
             await db.from("document_versions")
                 .delete()
                 .eq("document_id", documentId)
@@ -944,7 +1184,21 @@ $("uploadForm").addEventListener("submit", async function(event) {
     }
 });
 
- // DOWNLOAD DOCUMENT
+/* AUDIT LOGGED DOWNLOAD */
+async function logDocumentDownload(id) {
+    const { data, error } = await db.rpc(
+        "trustvault_log_download",
+        { p_document_id: id }
+    );
+
+    if (error) throw error;
+
+    if (data !== true) {
+        throw new Error("You do not have permission to access this document.");
+    }
+}
+
+/* DOWNLOAD */
 async function downloadFile(id) {
     try {
         if (!currentUser?.id) throw new Error("Please login first.");
@@ -952,16 +1206,7 @@ async function downloadFile(id) {
         const doc = allDocuments.find(item => item.id === id);
         if (!doc) throw new Error("Document not found.");
 
-        const { data: logged, error: logError } = await db.rpc(
-            "trustvault_log_download",
-            { p_document_id: id }
-        );
-
-        if (logError) throw logError;
-
-        if (logged !== true) {
-            throw new Error("You do not have permission to download this document.");
-        }
+        await logDocumentDownload(id);
 
         const { data, error } = await db.storage
             .from(BUCKET)
@@ -988,18 +1233,16 @@ async function downloadFile(id) {
     }
 }
 
-
-// DOCUMENT PREVIEW
-let previewObjectURL = null;
-
+/* PREVIEW */
 async function previewFile(id) {
     try {
-        if (!currentUser?.id) {
-            throw new Error("Please login first.");
-        }
+        if (!currentUser?.id) throw new Error("Please login first.");
 
         const doc = allDocuments.find(item => item.id === id);
         if (!doc) throw new Error("Document not found.");
+
+        // Preview access is also recorded in audit logs.
+        await logDocumentDownload(id);
 
         const { data, error } = await db.storage
             .from(BUCKET)
@@ -1007,25 +1250,19 @@ async function previewFile(id) {
 
         if (error) throw error;
 
-        if (previewObjectURL) {
-            URL.revokeObjectURL(previewObjectURL);
-        }
+        if (previewObjectURL) URL.revokeObjectURL(previewObjectURL);
 
         previewObjectURL = URL.createObjectURL(data);
 
-        const content = $("previewContent");
-        const title = $("previewTitle");
+        $("previewTitle").textContent = doc.title || "Document Preview";
 
-        title.textContent = doc.title || "Document Preview";
+        const content = $("previewContent");
         content.innerHTML = "";
 
         const fileName = (doc.file_name || doc.title || "").toLowerCase();
         const fileType = (data.type || "").toLowerCase();
 
-        if (
-            fileType === "application/pdf" ||
-            fileName.endsWith(".pdf")
-        ) {
+        if (fileType === "application/pdf" || fileName.endsWith(".pdf")) {
             const frame = document.createElement("iframe");
             frame.src = previewObjectURL;
             frame.title = "PDF Preview";
@@ -1053,8 +1290,6 @@ async function previewFile(id) {
     }
 }
 
-
-// CLOSE PREVIEW
 function closePreview() {
     $("previewModal").classList.add("hidden");
 
@@ -1066,75 +1301,70 @@ function closePreview() {
     $("previewContent").innerHTML = "";
 }
 
-
-// RENAME DOCUMENT
+/* RENAME */
 async function renameFile(id) {
- const doc = allDocuments.find(item => item.id === id);
+    const doc = allDocuments.find(item => item.id === id);
 
- if (!doc || !canManageDocument(doc)) {
-  showToast("You do not have permission to rename this document.");
-  return;
- }
+    if (!doc || !canManageDocument(doc)) {
+        showToast("You do not have permission to rename this document.");
+        return;
+    }
 
- const newTitle = prompt("Enter new document title:", doc.title);
- if (!newTitle || !newTitle.trim()) return;
+    const newTitle = prompt("Enter new document title:", doc.title);
+    if (!newTitle || !newTitle.trim()) return;
 
- try {
-  const { error } = await db
-   .from("documents")
-   .update({ title: newTitle.trim() })
-   .eq("id", id);
+    try {
+        const { error } = await db
+            .from("documents")
+            .update({ title: newTitle.trim() })
+            .eq("id", id);
 
-  if (error) throw error;
+        if (error) throw error;
 
-  await renderAll();
-  showToast("Document renamed successfully.");
+        await renderAll();
+        showToast("Document renamed successfully.");
 
- } catch (error) {
-  console.error("Rename error:", error);
-  showToast("Rename failed: " + error.message);
- }
+    } catch (error) {
+        showToast("Rename failed: " + error.message);
+    }
 }
 
-// DELETE DOCUMENT
+/* DELETE */
 async function deleteFile(id) {
- const doc = allDocuments.find(item => item.id === id);
+    const doc = allDocuments.find(item => item.id === id);
 
- if (!doc || !canManageDocument(doc)) {
-  showToast("You do not have permission to delete this document.");
-  return;
- }
+    if (!doc || !canManageDocument(doc)) {
+        showToast("You do not have permission to delete this document.");
+        return;
+    }
 
- if (!confirm("Are you sure you want to permanently delete " + doc.title + "?")) return;
+    if (!confirm("Are you sure you want to permanently delete " + doc.title + "?")) return;
 
- try {
-  const { error: storageError } = await db.storage
-   .from(BUCKET)
-   .remove([doc.storage_path]);
+    try {
+        const { error: storageError } = await db.storage
+            .from(BUCKET)
+            .remove([doc.storage_path]);
 
-  if (storageError) throw storageError;
+        if (storageError) throw storageError;
 
-  const { error: deleteError } = await db
-   .from("documents")
-   .delete()
-   .eq("id", id);
+        const { error: deleteError } = await db
+            .from("documents")
+            .delete()
+            .eq("id", id);
 
-  if (deleteError) {
-   throw new Error("File removed from storage, but database deletion failed: " + deleteError.message);
-  }
+        if (deleteError) {
+            throw new Error("File removed from storage, but database deletion failed: " + deleteError.message);
+        }
 
-  await renderAll();
-  showToast("Document deleted successfully.");
+        await renderAll();
+        showToast("Document deleted successfully.");
 
- } catch (error) {
-  console.error("Delete error:", error);
-  showToast("Delete failed: " + error.message);
- }
+    } catch (error) {
+        showToast("Delete failed: " + error.message);
+    }
 }
 
-// SEARCH AND CATEGORY FILTER
-
-// SEARCH, CATEGORY FILTER AND SORTING
+/* SEARCH / FILTER / SORT */
 function filterDocuments() {
     const search = $("documentSearch").value.toLowerCase().trim();
     const category = $("categoryFilter").value;
@@ -1147,17 +1377,11 @@ function filterDocuments() {
     );
 
     if (sort === "newest") {
-        filtered.sort((a, b) =>
-            new Date(b.created_at) - new Date(a.created_at)
-        );
+        filtered.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
     } else if (sort === "oldest") {
-        filtered.sort((a, b) =>
-            new Date(a.created_at) - new Date(b.created_at)
-        );
+        filtered.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
     } else if (sort === "name") {
-        filtered.sort((a, b) =>
-            (a.title || "").localeCompare(b.title || "")
-        );
+        filtered.sort((a,b) => (a.title || "").localeCompare(b.title || ""));
     }
 
     renderFiles("myDocuments", filtered);
@@ -1167,235 +1391,25 @@ $("documentSearch").addEventListener("input", filterDocuments);
 $("categoryFilter").addEventListener("change", filterDocuments);
 $("documentSort").addEventListener("change", filterDocuments);
 
-
-// SHARE DOCUMENT
+/* SHARE DOCUMENT */
 async function shareFile(id) {
- const doc = allDocuments.find(item => item.id === id);
+    const doc = allDocuments.find(item => item.id === id);
 
- if (!doc || !canManageDocument(doc)) {
-  showToast("You do not have permission to share this document.");
-  return;
- }
-
- $("shareDocumentId").value = id;
- $("shareEmail").value = "";
- $("sharePermission").value = "read";
-
- openModal("shareModal");
- await loadPermissions(id);
-}
-
-$("shareForm").addEventListener("submit", async event => {
- event.preventDefault();
-
- const button = $("shareForm").querySelector('button[type="submit"]');
- const id = $("shareDocumentId").value;
- const email = $("shareEmail").value.trim();
- const permission = $("sharePermission").value;
-
- if (!currentUser?.id) {
-  showToast("Please login first.");
-  return;
- }
-
- if (!id || !email) {
-  showToast("Please enter a valid email.");
-  return;
- }
-
- const doc = allDocuments.find(item => item.id === id);
-
- if (!doc || !canManageDocument(doc)) {
-  showToast("You cannot share this document.");
-  return;
- }
-
- button.disabled = true;
-
- try {
-  const { data: users, error: usersError } =
-   await db.rpc("trustvault_list_users");
-
-  if (usersError) throw usersError;
-
-  const user = (users || []).find(
-   u => u.email?.toLowerCase() === email.toLowerCase()
-  );
-
-  if (!user) {
-   showToast("User not found.");
-   return;
-  }
-
-  const granteeId =
-   user.id || user.user_id || user.uid || user.profile_id ||
-   user.auth_user_id || user.user_uuid;
-
-  if (!granteeId) {
-   showToast("Unable to identify user ID.");
-   return;
-  }
-
-  if (granteeId === currentUser.id) {
-   showToast("You already own this document.");
-   return;
-  }
-
-  const { data: existing, error: checkError } = await db
-   .from("document_permissions")
-   .select("document_id")
-   .eq("document_id", id)
-   .eq("grantee_id", granteeId)
-   .maybeSingle();
-
-  if (checkError) throw checkError;
-
-  if (existing) {
-   const { error } = await db
-    .from("document_permissions")
-    .update({ permission })
-    .eq("document_id", id)
-    .eq("grantee_id", granteeId);
-
-   if (error) throw error;
-
-   showToast("Existing document permission updated.");
-
-  } else {
-   const { error } = await db.rpc(
-    "trustvault_grant_permission",
-    {
-     p_document_id: id,
-     p_email: email,
-     p_permission: permission
+    if (!doc || !canManageDocument(doc)) {
+        showToast("You do not have permission to share this document.");
+        return;
     }
-   );
 
-   if (error) throw error;
+    $("shareDocumentId").value = id;
+    $("shareEmail").value = "";
+    $("sharePermission").value = "read";
 
-   showToast("Document access granted.");
-  }
-
-  $("shareEmail").value = "";
-
-  await loadPermissions(id);
-  await renderAll();
-
- } catch (error) {
-  console.error("Sharing error:", error);
-  showToast("Sharing failed: " + error.message);
-
- } finally {
-  button.disabled = false;
- }
-});
-
-// LOAD CURRENT PERMISSIONS
-async function loadPermissions(documentId) {
- const container = $("permissionList");
- container.textContent = "Loading permissions...";
-
- try {
-  const { data, error } = await db
-   .from("document_permissions")
-   .select("id, grantee_id, permission")
-   .eq("document_id", documentId);
-
-  if (error) throw error;
-
-  if (!data || data.length === 0) {
-   container.innerHTML = '<p class="muted">No users have access yet.</p>';
-   return;
-  }
-
-  container.innerHTML = data.map(permission => `
-   <div class="doc-card" style="margin-top:10px">
-    <p>${escapeHTML(permission.grantee_id)}</p>
-    <p class="muted">Permission: ${escapeHTML(permission.permission)}</p>
-    <button class="danger" onclick="revokeFile('${escapeHTML(documentId)}','${escapeHTML(permission.grantee_id)}')">Revoke</button>
-   </div>
-  `).join("");
-
- } catch (error) {
-  console.error("Permission loading error:", error);
-  container.textContent = "Unable to load permissions: " + error.message;
- }
+    openModal("shareModal");
+    await loadPermissions(id);
 }
 
-// REVOKE ACCESS
-async function revokeFile(documentId, granteeId) {
- const doc = allDocuments.find(item => item.id === documentId);
-
- if (!doc || !canManageDocument(doc)) {
-  showToast("You cannot revoke this access.");
-  return;
- }
-
- if (!confirm("Revoke access for this user?")) return;
-
- try {
-  const { error } = await db
-   .from("document_permissions")
-   .delete()
-   .eq("document_id", documentId)
-   .eq("grantee_id", granteeId);
-
-  if (error) throw error;
-
-  await loadPermissions(documentId);
-  await renderAll();
-
-  showToast("Access revoked.");
-
- } catch (error) {
-  console.error("Revoke error:", error);
-  showToast("Revoke failed: " + error.message);
- }
-}
-
-// ACTIVITY LOGS
-async function renderHistory() {
- const container = $("activityList");
- container.textContent = "Loading activity...";
-
- try {
-  const { data, error } = await db
-   .from("audit_logs")
-   .select("*")
-   .order("created_at", { ascending: false })
-   .limit(100);
-
-  if (error) throw error;
-
-  if (!data || data.length === 0) {
-   container.innerHTML = '<div class="empty">No activity records found.</div>';
-   return;
-  }
-
-  container.innerHTML = data.map(log => {
-   const details = typeof log.details === "object"
-    ? JSON.stringify(log.details)
-    : (log.details || "");
-
-   return `
-    <div class="doc-card" style="margin-bottom:12px">
-     <strong>${escapeHTML(log.action || "Activity")}</strong>
-     <p class="muted">${escapeHTML(details)}</p>
-     <small class="muted">${escapeHTML(formatDate(log.created_at))}</small>
-    </div>`;
-  }).join("");
-
- } catch (error) {
-  console.error("Activity log error:", error);
-  container.innerHTML =
-   '<div class="empty">Unable to load activity: ' +
-   escapeHTML(error.message) + '</div>';
- }
-}
-
-// ADMIN: GET USER ID FROM POSSIBLE RPC FIELD NAMES
 function getUserId(user) {
- return user?.id ??
+    return user?.id ??
         user?.user_id ??
         user?.uid ??
         user?.profile_id ??
@@ -1404,189 +1418,433 @@ function getUserId(user) {
         null;
 }
 
-// ADMIN: LOAD USERS
-async function loadUsers() {
- const container = $("usersList");
+$("shareForm").addEventListener("submit", async event => {
+    event.preventDefault();
 
- if (!isAdmin()) {
-  container.textContent = "Admin access required.";
-  return;
- }
+    const button = $("shareForm").querySelector('button[type="submit"]');
+    const id = $("shareDocumentId").value;
+    const email = $("shareEmail").value.trim();
+    const permission = $("sharePermission").value;
 
- container.textContent = "Loading users...";
+    const doc = allDocuments.find(item => item.id === id);
 
- try {
-  const { data, error } = await db.rpc("trustvault_list_users");
-
-  if (error) throw error;
-
-  console.log("TRUSTVAULT LIST USERS RPC RESPONSE:", data);
-
-  if (!Array.isArray(data) || data.length === 0) {
-   container.innerHTML = '<div class="empty">No users found.</div>';
-   return;
-  }
-
-  container.innerHTML = data.map(user => {
-   const userId = getUserId(user);
-
-   if (!userId) {
-    console.error("User ID field not found:", user);
-
-    return `
-     <div class="doc-card" style="margin-bottom:12px">
-      <h3>${escapeHTML(user.full_name || "User")}</h3>
-      <p class="muted">${escapeHTML(user.email || "")}</p>
-      <p class="muted">User ID missing in RPC response.</p>
-     </div>`;
-   }
-
-   const role = user.role || "viewer";
-   const isCurrentUser = userId === currentUser.id;
-
-   return `
-    <div class="doc-card" style="margin-bottom:12px">
-     <h3>${escapeHTML(user.full_name || "User")}</h3>
-     <p class="muted">${escapeHTML(user.email || "")}</p>
-     <p class="muted">Current role: ${escapeHTML(role)}</p>
-     ${
-      isCurrentUser
-      ? '<small class="muted">Your account</small>'
-      : `
-       <div class="field">
-        <select id="role-${escapeHTML(userId)}">
-         <option value="viewer" ${role === "viewer" ? "selected" : ""}>Viewer</option>
-         <option value="admin" ${role === "admin" ? "selected" : ""}>Admin</option>
-        </select>
-       </div>
-       <button style="margin-top:10px" onclick="changeRole('${escapeHTML(userId)}')">Update Role</button>
-      `
-     }
-    </div>`;
-  }).join("");
-
- } catch (error) {
-  console.error("Load users error:", error);
-  container.innerHTML =
-   '<div class="empty">Unable to load users: ' +
-   escapeHTML(error.message) + '</div>';
- }
-}
-
-// ADMIN: CHANGE ROLE
-async function changeRole(userId) {
- if (!isAdmin()) {
-  showToast("Admin access required.");
-  return;
- }
-
- if (!userId || userId === "undefined" || userId === "null") {
-  showToast("User ID is missing. Check the users RPC response.");
-  return;
- }
-
- if (userId === currentUser.id) {
-  showToast("You cannot change your own role here.");
-  return;
- }
-
- const select = $("role-" + userId);
-
- if (!select) {
-  showToast("Role selector not found.");
-  return;
- }
-
- const newRole = select.value;
-
- if (!["admin", "viewer"].includes(newRole)) {
-  showToast("Invalid role selected.");
-  return;
- }
-
- if (!confirm("Change this user's role to " + newRole + "?")) return;
-
- try {
-  const { error } = await db.rpc("trustvault_set_user_role", {
-   p_user_id: userId,
-   p_role: newRole
-  });
-
-  if (error) throw error;
-
-  showToast("User role updated successfully.");
-  await loadUsers();
-
- } catch (error) {
-  console.error("Role update error:", error);
-  showToast("Role update failed: " + error.message);
- }
-}
-
-// INITIALIZE APPLICATION
-setAuthMode("login");
-initializeAuth();
-// VERSION HISTORY - UPLOAD ACTION
-$("uploadAction").addEventListener("change", async function () {
-    const isUpdate = this.value === "update";
-
-    $("existingDocumentField").classList.toggle("hidden", !isUpdate);
-
-    $("fileTitle").readOnly = isUpdate;
-    $("fileCategory").disabled = isUpdate;
-
-    if (!isUpdate) {
-        $("fileTitle").value = "";
-        $("fileCategory").disabled = false;
-        $("existingDocumentSelect").innerHTML =
-            '<option value="">Select Document</option>';
+    if (!doc || !canManageDocument(doc)) {
+        showToast("You cannot share this document.");
         return;
     }
 
+    button.disabled = true;
+
+    try {
+        const { data: users, error: usersError } =
+            await db.rpc("trustvault_list_users");
+
+        if (usersError) throw usersError;
+
+        const user = (users || []).find(
+            u => u.email?.toLowerCase() === email.toLowerCase()
+        );
+
+        if (!user) throw new Error("User not found.");
+
+        const granteeId = getUserId(user);
+
+        if (!granteeId) throw new Error("Unable to identify user ID.");
+        if (granteeId === currentUser.id) throw new Error("You already own this document.");
+
+        const { data: existing, error: checkError } = await db
+            .from("document_permissions")
+            .select("document_id")
+            .eq("document_id", id)
+            .eq("grantee_id", granteeId)
+            .maybeSingle();
+
+        if (checkError) throw checkError;
+
+        if (existing) {
+            const { error } = await db
+                .from("document_permissions")
+                .update({ permission })
+                .eq("document_id", id)
+                .eq("grantee_id", granteeId);
+
+            if (error) throw error;
+
+            showToast("Existing permission updated.");
+
+        } else {
+            const { error } = await db.rpc(
+                "trustvault_grant_permission",
+                {
+                    p_document_id: id,
+                    p_email: email,
+                    p_permission: permission
+                }
+            );
+
+            if (error) throw error;
+
+            showToast("Document access granted.");
+        }
+
+        $("shareEmail").value = "";
+
+        await loadPermissions(id);
+        await renderAll();
+
+    } catch (error) {
+        console.error("Sharing error:", error);
+        showToast("Sharing failed: " + error.message);
+
+    } finally {
+        button.disabled = false;
+    }
+});
+
+/* LOAD PERMISSIONS */
+async function loadPermissions(documentId) {
+    const container = $("permissionList");
+    container.textContent = "Loading permissions...";
+
     try {
         const { data, error } = await db
-            .from("documents")
-            .select("id, title, category")
-            .eq("owner_id", currentUser.id)
-            .order("created_at", { ascending: false });
+            .from("document_permissions")
+            .select("id, grantee_id, permission")
+            .eq("document_id", documentId);
 
         if (error) throw error;
 
-        const select = $("existingDocumentSelect");
-        select.innerHTML = '<option value="">Select Document</option>';
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="muted">No users have access yet.</p>';
+            return;
+        }
 
-        (data || []).forEach(doc => {
-            const option = document.createElement("option");
-            option.value = doc.id;
-            option.textContent = doc.title;
-            select.appendChild(option);
-        });
+        container.innerHTML = data.map(permission => `
+            <div class="doc-card" style="margin-top:10px">
+                <p>${escapeHTML(permission.grantee_id)}</p>
+                <p class="muted">Permission: ${escapeHTML(permission.permission)}</p>
+                <button class="danger" onclick="revokeFile('${escapeHTML(documentId)}','${escapeHTML(permission.grantee_id)}')">Revoke</button>
+            </div>
+        `).join("");
 
     } catch (error) {
-        console.error("Document list error:", error);
-        showToast("Unable to load documents: " + error.message);
+        container.textContent = "Unable to load permissions: " + error.message;
     }
-});
+}
 
-// SELECT EXISTING DOCUMENT
-$("existingDocumentSelect").addEventListener("change", function () {
-    const doc = allDocuments.find(item => item.id === this.value);
+/* REVOKE ACCESS */
+async function revokeFile(documentId, granteeId) {
+    const doc = allDocuments.find(item => item.id === documentId);
 
-    if (doc) {
-        $("fileTitle").value = doc.title;
-        $("fileCategory").value = doc.category;
+    if (!doc || !canManageDocument(doc)) {
+        showToast("You cannot revoke this access.");
+        return;
     }
-});
+
+    if (!confirm("Revoke access for this user?")) return;
+
+    try {
+        const { error } = await db
+            .from("document_permissions")
+            .delete()
+            .eq("document_id", documentId)
+            .eq("grantee_id", granteeId);
+
+        if (error) throw error;
+
+        await loadPermissions(documentId);
+        await renderAll();
+
+        showToast("Access revoked.");
+
+    } catch (error) {
+        showToast("Revoke failed: " + error.message);
+    }
+}
+
+/* ACTIVITY LOGS */
+async function renderHistory() {
+    const container = $("activityList");
+    container.textContent = "Loading activity...";
+
+    try {
+        const { data, error } = await db
+            .from("audit_logs")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(100);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            activityLogsCache = [];
+            updateActivityStats();
+            container.innerHTML =
+                '<div class="empty">No activity records found.</div>';
+            return;
+        }
+
+        const actorIds = [...new Set(
+            data.map(log => log.actor_id).filter(Boolean)
+        )];
+
+        let profiles = [];
+
+        if (actorIds.length > 0) {
+            const { data: profileData, error: profileError } = await db
+                .from("profiles")
+                .select("id, full_name, role")
+                .in("id", actorIds);
+
+            if (profileError) throw profileError;
+            profiles = profileData || [];
+        }
+
+        const profileMap = {};
+
+        profiles.forEach(profile => {
+            profileMap[profile.id] = profile;
+        });
+
+        activityLogsCache = data.map(log => ({
+            ...log,
+            actorName: profileMap[log.actor_id]?.full_name || "Unknown user",
+            actorRole: profileMap[log.actor_id]?.role || "Unknown role"
+        }));
+
+        updateActivityStats();
+        filterActivityLogs();
+
+    } catch (error) {
+        console.error("Activity log error:", error);
+
+        container.innerHTML =
+            '<div class="empty">Unable to load activity: ' +
+            escapeHTML(error.message) + '</div>';
+    }
+}
+
+/* FILTER ACTIVITY LOGS */
+function filterActivityLogs() {
+    const search = ($("activitySearch")?.value || "").trim().toLowerCase();
+    const action = $("activityFilter")?.value || "all";
+    const selectedDate = $("activityDate")?.value || "";
+
+    const filtered = activityLogsCache.filter(log => {
+        const details = typeof log.details === "object"
+            ? JSON.stringify(log.details || {})
+            : String(log.details || "");
+
+        const matchesSearch =
+            (log.actorName || "").toLowerCase().includes(search) ||
+            details.toLowerCase().includes(search) ||
+            (log.action || "").toLowerCase().includes(search);
+
+        const matchesAction =
+            action === "all" || log.action === action;
+
+        const logDate = log.created_at
+            ? new Date(log.created_at).toLocaleDateString("en-CA")
+            : "";
+
+        const matchesDate =
+            !selectedDate || logDate === selectedDate;
+
+        return matchesSearch && matchesAction && matchesDate;
+    });
+
+    displayActivityLogs(filtered);
+}
+
+/* DISPLAY FILTERED ACTIVITY LOGS */
+function displayActivityLogs(logs) {
+    const container = $("activityList");
+
+    if (!logs.length) {
+        container.innerHTML =
+            '<div class="empty">No matching activity found.</div>';
+        return;
+    }
+
+    container.innerHTML = logs.map(log => {
+        const details = typeof log.details === "object"
+            ? JSON.stringify(log.details || {})
+            : String(log.details || "");
+
+        return `
+            <div class="doc-card" style="margin-bottom:12px">
+                <strong>${escapeHTML((log.action || "Activity").toUpperCase())}</strong>
+
+                <p class="muted">
+                    <strong>Performed by:</strong>
+                    ${escapeHTML(log.actorName || "Unknown user")}
+                </p>
+
+                <p class="muted">
+                    <strong>Role:</strong>
+                    ${escapeHTML(log.actorRole || "Unknown role")}
+                </p>
+
+                <p class="muted">
+                    <strong>Document ID:</strong>
+                    ${escapeHTML(log.document_id || "Not available")}
+                </p>
+
+                <p class="muted">
+                    <strong>Details:</strong>
+                    ${escapeHTML(details)}
+                </p>
+
+                <small class="muted">
+                    ${escapeHTML(formatDate(log.created_at))}
+                </small>
+            </div>
+        `;
+    }).join("");
+}
+
+/* CLEAR FILTERS */
+function clearActivityFilters() {
+    $("activitySearch").value = "";
+    $("activityFilter").value = "all";
+    $("activityDate").value = "";
+    filterActivityLogs();
+}
+
+/* ACTIVITY SUMMARY */
+function updateActivityStats() {
+    $("totalActivities").textContent = activityLogsCache.length;
+
+    $("totalUploads").textContent =
+        activityLogsCache.filter(log => log.action === "upload").length;
+
+    $("totalDownloads").textContent =
+        activityLogsCache.filter(log => log.action === "download").length;
+
+    $("totalDenied").textContent =
+        activityLogsCache.filter(log => log.action === "access_denied").length;
+}
+
+/* ADMIN: LOAD USERS */
+async function loadUsers() {
+    const container = $("usersList");
+
+    if (!isAdmin()) {
+        container.textContent = "Admin access required.";
+        return;
+    }
+
+    container.textContent = "Loading users...";
+
+    try {
+        const { data, error } = await db.rpc("trustvault_list_users");
+
+        if (error) throw error;
+
+        if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = '<div class="empty">No users found.</div>';
+            return;
+        }
+
+        container.innerHTML = data.map(user => {
+            const userId = getUserId(user);
+
+            if (!userId) {
+                return `
+                    <div class="doc-card" style="margin-bottom:12px">
+                        <h3>${escapeHTML(user.full_name || "User")}</h3>
+                        <p class="muted">${escapeHTML(user.email || "")}</p>
+                        <p class="muted">User ID missing in RPC response.</p>
+                    </div>`;
+            }
+
+            const role = user.role || "viewer";
+            const isCurrentUser = userId === currentUser.id;
+
+            return `
+                <div class="doc-card" style="margin-bottom:12px">
+                    <h3>${escapeHTML(user.full_name || "User")}</h3>
+                    <p class="muted">${escapeHTML(user.email || "")}</p>
+                    <p class="muted">Current role: ${escapeHTML(role)}</p>
+
+                    ${
+                        isCurrentUser
+                        ? '<small class="muted">Your account</small>'
+                        : `
+                            <div class="field">
+                                <select id="role-${escapeHTML(userId)}">
+                                    <option value="viewer" ${role === "viewer" ? "selected" : ""}>Viewer</option>
+                                    <option value="admin" ${role === "admin" ? "selected" : ""}>Admin</option>
+                                </select>
+                            </div>
+
+                            <button style="margin-top:10px"
+                                onclick="changeRole('${escapeHTML(userId)}')">
+                                Update Role
+                            </button>
+                        `
+                    }
+                </div>`;
+        }).join("");
+
+    } catch (error) {
+        console.error("Load users error:", error);
+
+        container.innerHTML =
+            '<div class="empty">Unable to load users: ' +
+            escapeHTML(error.message) + '</div>';
+    }
+}
+
+/* ADMIN: CHANGE ROLE */
+async function changeRole(userId) {
+    if (!isAdmin()) {
+        showToast("Admin access required.");
+        return;
+    }
+
+    if (!userId || userId === currentUser.id) {
+        showToast("Invalid user ID or your own account.");
+        return;
+    }
+
+    const select = $("role-" + userId);
+
+    if (!select) {
+        showToast("Role selector not found.");
+        return;
+    }
+
+    const newRole = select.value;
+
+    if (!["admin", "viewer"].includes(newRole)) {
+        showToast("Invalid role selected.");
+        return;
+    }
+
+    if (!confirm("Change this user's role to " + newRole + "?")) return;
+
+    try {
+        const { error } = await db.rpc("trustvault_set_user_role", {
+            p_user_id: userId,
+            p_role: newRole
+        });
+
+        if (error) throw error;
+
+        showToast("User role updated successfully.");
+        await loadUsers();
+
+    } catch (error) {
+        console.error("Role update error:", error);
+        showToast("Role update failed: " + error.message);
+    }
+}
+
+/* INITIALIZE APPLICATION */
+setAuthMode("login");
+initializeAuth();
+
 </script>
-
-<div id="previewModal" class="modal hidden">
-    <div class="modal-card modal-content">
-        <div class="heading">
-            <h2 id="previewTitle">Document Preview</h2>
-            <button onclick="closePreview()">✕</button>
-        </div>
-        <div id="previewContent"></div>
-    </div>
-</div>
 </body>
 </html>
