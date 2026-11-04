@@ -395,6 +395,9 @@ main {min-width:0;padding:5px 0}
 <div class="toolbar">
 <input id="documentSearch" placeholder="Search documents...">
 <input id="documentOwnerSearch" placeholder="Search by owner...">
+<input type="date" id="dateFrom" title="From Date">
+
+<input type="date" id="dateTo" title="To Date">
 <select id="categoryFilter">
 <option value="">All Categories</option>
 <option>Academic</option>
@@ -1426,29 +1429,38 @@ async function deleteFile(id) {
 /* SEARCH / FILTER / SORT */
 function filterDocuments() {
     const search = $("documentSearch").value.toLowerCase().trim();
+    const ownerSearch = $("documentOwnerSearch").value.toLowerCase().trim();
     const category = $("categoryFilter").value;
+    const dateFrom = $("dateFrom").value;
+const dateTo = $("dateTo").value;
     const sort = $("documentSort").value;
 
     let filtered = allDocuments.filter(doc =>
         canManageDocument(doc) &&
         (doc.title || "").toLowerCase().includes(search) &&
-        (!category || doc.category === category)
+        (doc.owner_name || "").toLowerCase().includes(ownerSearch) &&
+        (!category || doc.category === category) &&
+(!dateFrom || doc.created_at.slice(0, 10) >= dateFrom) &&
+(!dateTo || doc.created_at.slice(0, 10) <= dateTo)
     );
 
     if (sort === "newest") {
-        filtered.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     } else if (sort === "oldest") {
-        filtered.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+        filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     } else if (sort === "name") {
-        filtered.sort((a,b) => (a.title || "").localeCompare(b.title || ""));
+        filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
     }
 
     renderFiles("myDocuments", filtered);
 }
 
 $("documentSearch").addEventListener("input", filterDocuments);
+$("documentOwnerSearch").addEventListener("input", filterDocuments);
 $("categoryFilter").addEventListener("change", filterDocuments);
 $("documentSort").addEventListener("change", filterDocuments);
+$("dateFrom").addEventListener("change", filterDocuments);
+$("dateTo").addEventListener("change", filterDocuments);
 
 /* SHARE DOCUMENT */
 async function shareFile(id) {

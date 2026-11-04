@@ -117,15 +117,25 @@ async function loadDocuments() {
   documents = data || [];
   $("documentCount").textContent = documents.length;
   renderDocuments();
-}
-function renderDocuments() {
+}function renderDocuments() {
   const search = $("searchInput").value.toLowerCase().trim();
   const category = $("categoryFilter").value;
 
-  const filtered = documents.filter(item =>
-    (!search || `${item.title} ${item.category}`.toLowerCase().includes(search)) &&
-    (!category || item.category === category)
-  );
+  const dateFrom = $("dateFrom")?.value || "";
+  const dateTo = $("dateTo")?.value || "";
+
+  const filtered = documents.filter(item => {
+    const documentDate = item.created_at
+      ? item.created_at.slice(0, 10)
+      : "";
+
+    return (
+      (!search || `${item.title} ${item.category}`.toLowerCase().includes(search)) &&
+      (!category || item.category === category) &&
+      (!dateFrom || documentDate >= dateFrom) &&
+      (!dateTo || documentDate <= dateTo)
+    );
+  });
 
   $("documentsList").innerHTML = filtered.length
     ? filtered.map(item => `
@@ -369,6 +379,8 @@ $("openUploadBtn").addEventListener("click", () => {
   $("uploadForm").addEventListener("submit", uploadFile);
   $("searchInput").addEventListener("input", renderDocuments);
   $("categoryFilter").addEventListener("change", renderDocuments);
+  $("dateFrom").addEventListener("change", renderDocuments);
+$("dateTo").addEventListener("change", renderDocuments);
 
   document.querySelectorAll(".nav-btn").forEach(button => {
     button.addEventListener("click", () => showView(button.dataset.view));
