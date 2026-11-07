@@ -1575,24 +1575,31 @@ async function revokeFile(documentId, granteeId) {
     if (!confirm("Revoke access for this user?")) return;
 
     try {
-        const { error } = await db
+        const { data, error } = await db
             .from("document_permissions")
             .delete()
             .eq("document_id", documentId)
-            .eq("grantee_id", granteeId);
+            .eq("grantee_id", granteeId)
+            .select("id, document_id, grantee_id");
 
         if (error) throw error;
+
+        if (!data || data.length === 0) {
+            throw new Error("No permission row deleted. Check owner session and RLS.");
+        }
+
+        console.log("Revoked permission:", data);
 
         await loadPermissions(documentId);
         await renderAll();
 
-        showToast("Access revoked.");
+        showToast("Access revoked successfully.");
 
     } catch (error) {
+        console.error("Revoke error:", error);
         showToast("Revoke failed: " + error.message);
     }
 }
-
 /* ACTIVITY LOGS */
 async function renderHistory() {
     const container = $("activityList");
@@ -1820,7 +1827,12 @@ async function loadUsers() {
         }).join("");
 
     } catch (error) {
-        console.error("Load users error:", error);
+        console.log("Load users error details:", {
+    message: error.message,
+    code: error.code,
+    details: error.details,
+    hint: error.hint
+});
 
         container.innerHTML =
             '<div class="empty">Unable to load users: ' +

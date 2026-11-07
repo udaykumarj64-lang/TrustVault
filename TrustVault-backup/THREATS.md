@@ -2,42 +2,43 @@
 
 ## 1. Project Overview
 
-TrustVault is a secure document-sharing platform that allows users to upload, manage, share, and download documents with role-based access control.
+TrustVault is a secure document-management and sharing platform. It allows users to upload, organize, manage, share, and download documents using role-based access control.
 
 ## 2. Security Threats and Mitigations
 
 | Threat | Mitigation |
 |---|---|
-| Unauthorized document reading | PostgreSQL Row Level Security (RLS) and private Supabase Storage bucket |
-| Unauthorized document deletion | Server-side owner/admin authorization |
-| Self-assigned admin role | Prevent unauthorized profile role updates |
-| Leaked file links | Private Storage bucket; avoid long-lived signed URLs |
-| Permission revocation bypass | Recheck authorization on every download |
-| Forged audit events | Trusted database triggers and restricted functions |
-| Forged file MIME type | Validate file type, size and content |
-| Password attacks | Email verification, rate limiting and MFA |
-| SQL privilege escalation | Fixed search_path and restricted RPC permissions |
-| Unauthorized permission changes | RLS policies for permission grants and revocations |
+| Unauthorized document reading | PostgreSQL Row Level Security (RLS) and a private Supabase Storage bucket |
+| Unauthorized document modification or deletion | Database authorization policies based on user roles and document ownership |
+| Self-assigned admin role | Restrict profile role updates through database policies and trusted functions |
+| Leaked file links | Private Storage bucket and controlled download access |
+| Permission revocation bypass | Recheck document permissions when accessing files |
+| Forged audit events | Database audit triggers and restricted write access |
+| Invalid or oversized file uploads | File-type restrictions and a 10 MB upload limit |
+| Password attacks | Apply authentication-provider protections; evaluate rate limiting and MFA |
+| SQL privilege escalation | Restrict database function execution and use a fixed search path where configured |
+| Unauthorized permission changes | RLS policies and owner/admin authorization for permission management |
 
 ## 3. User Roles
 
 - **Admin:** Can manage and monitor documents and permissions according to admin policies.
 - **Document Owner:** Can manage owned documents and grant or revoke access.
-- **Viewer:** Can access only documents for which read permission is granted.
+- **Viewer:** Can access documents only when the required permission is granted.
 
-## 4. Security Controls Implemented and Tested
+## 4. Security Controls Implemented and Manually Tested
 
-- Private document Storage bucket.
-- Row Level Security enabled on public tables.
-- Document access controlled by user identity and permissions.
+- Private Supabase Storage bucket.
+- Row Level Security policies on application tables.
+- Document access controlled by user identity, ownership, and permissions.
 - Permission grant and revoke audit events.
-- Download authorization checks.
-- Unauthorized access attempts recorded in audit logs.
-- Database functions hardened with restricted execution privileges.
+- Document download access checks.
+- Viewer access restrictions for document updates and deletions.
+- Upload validation for blocked file types and the 10 MB size limit.
+- Admin access to documents and Activity Logs.
 
-## 5. Automated Security Test Results
+## 5. Automated Security Tests
 
-The following five pgTAP tests were executed successfully:
+The existing pgTAP test suite contains five database security scenarios:
 
 1. Viewer cannot see a revoked document.
 2. Viewer cannot see revoked document permissions.
@@ -45,17 +46,32 @@ The following five pgTAP tests were executed successfully:
 4. Viewer cannot delete a revoked document.
 5. Admin can view the document.
 
-**Test result: 5/5 passed for the tested database scenarios.**
+**Test result:** The project has previously reported 5/5 passing tests. Rerun the pgTAP suite and verify its output before treating this as the final submission result.
 
-## 6. Known Limitations and Future Improvements
+## 6. Manual Security Testing
 
-- Implement and test a dedicated document-owner account and role.
-- Add automated tests for permission grants, revocations and Storage access.
-- Add server-side file content validation and malware scanning.
-- Add password rate limiting and multi-factor authentication.
+Manual tests were performed in the local development environment and deployed Vercel application.
+
+- Owner-to-Viewer document sharing and permission revocation.
+- Revoked document disappears from the Viewer's shared documents.
+- Unauthorized Viewer update and delete attempts do not change or remove the original document.
+- Admin document access and Activity Logs.
+- Permission and document activity audit events.
+- Invalid `.exe` upload blocked.
+- Valid PDF upload succeeds and remains after refresh.
+- File exceeding 10 MB blocked.
+
+**Note:** A Storage response such as "Object not found" is not, by itself, definitive proof of an authorization denial. Permission removal was also checked separately in the database.
+
+## 7. Known Limitations and Future Improvements
+
+- Expand automated tests for document owners, permission grants, revocations, and Storage access.
+- Add server-side file-content validation and malware scanning.
+- Evaluate password rate limiting and multi-factor authentication.
 - Verify audit logging for failed Storage requests.
-- Test immediate revocation against all download methods.
+- Test immediate permission revocation against every download method.
+- Perform an independent security review before production use.
 
-## 7. Security Disclaimer
+## 8. Security Disclaimer
 
-Passing the current tests does not establish production-level security. Further testing, independent security review and deployment hardening are required.
+The current tests provide evidence that the tested security controls work in the tested scenarios. They do not establish production-level security or constitute an independent penetration test. Further automated testing, security review, and deployment hardening are recommended.

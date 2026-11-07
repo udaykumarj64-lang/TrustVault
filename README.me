@@ -1,0 +1,67 @@
+# TrustVault – Security Test Report
+
+**Project:** TrustVault – Secure Document Management  
+**Testing scope:** Local and Vercel Live Website  
+**Test date:** 6 November 2026  
+**Status:** Core manual security tests completed
+
+## 1. Objective
+
+To verify that TrustVault enforces role-based access control, secure document sharing, permission revocation, upload validation, and audit logging.
+
+## 2. Test Results
+
+| No. | Test case | Environment | Result |
+|---|---|---|---|
+| 1 | Owner grants document access to Viewer | Local and Live | PASS |
+| 2 | Viewer can see shared document | Local and Live | PASS |
+| 3 | Owner revokes Viewer permission | Local and Live | PASS |
+| 4 | Revoked document disappears from Shared With Me | Local and Live | PASS |
+| 5 | Direct Storage download after revocation | Local and Live | PASS* |
+| 6 | Revoked permission row removed from database | Supabase | PASS |
+| 7 | Viewer cannot update another user's document | Live | PASS |
+| 8 | Original document title remains unchanged | Supabase | PASS |
+| 9 | Viewer cannot delete another user's document | Live | PASS |
+| 10 | Original document remains in database | Supabase | PASS |
+| 11 | Admin can view another user's document | Live | PASS |
+| 12 | Admin can access Activity Logs | Live | PASS |
+| 13 | Permission grant/revoke and file activity events appear in logs | Live | PASS |
+| 14 | Owner sees only their own documents | Live | PASS |
+| 15 | Invalid `.exe` upload is blocked | Live | PASS |
+| 16 | Valid PDF upload succeeds | Live | PASS |
+| 17 | Uploaded PDF remains after refresh | Live | PASS |
+| 18 | File exceeding 10 MB is blocked | Live | PASS |
+
+\*The direct Storage download returned `data: null` and `StorageApiError: Object not found`. The permission row was separately verified as absent in the database. This is consistent with revoked access; the error alone does not prove the cause.
+
+## 3. Database Verification
+
+The following checks were performed:
+
+- Revoked permission query returned zero rows.
+- Original document title remained `SALARY SLIP`.
+- Original document owner ID remained unchanged.
+- The document still existed after the Viewer attempted deletion.
+
+## 4. Upload Validation
+
+Allowed file formats displayed by the application:
+
+- PDF
+- Word
+- Excel
+- PowerPoint
+- TXT
+- JPG and PNG
+
+Maximum file size: **10 MB**
+
+Invalid executable upload and oversized file upload were blocked.
+
+## 5. Conclusion
+
+The completed manual tests provide evidence that TrustVault's core role-based document access, sharing and revocation, document protection, audit logging, and upload validation workflows are functioning in the tested environments.
+
+Further automated testing, additional RLS and Storage policy coverage, and independent security review are recommended before production use.
+
+**Note:** This report records the manual tests performed. It does not claim that a complete penetration test or independent security audit has been conducted.

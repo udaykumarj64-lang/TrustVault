@@ -35,22 +35,142 @@ https://github.com/udaykumarj64-lang/TrustVault
 
 ## User Roles
 
-- **Admin:** Administrative access according to database policies.
-- **Document Owner:** Intended role for managing owned documents and sharing permissions.
-- **Viewer:** Can access documents only when authorized.
+- **Admin:** Can access administrative features, view documents and review activity logs, subject to database security policies.
+- **Document Owner:** Can manage documents they own and grant or revoke access permissions where authorized.
+- **Viewer:** Can view documents shared with them, subject to the granted permissions.
 
-**Note:** Dedicated document-owner role support requires further implementation and testing.
+Access is enforced through Supabase Row Level Security (RLS) and Storage policies, not merely by hiding UI elements.
 
 ## Local Setup
 
-1. Clone the GitHub repository.
-2. Open the project folder in VS Code.
-3. Create a Supabase project.
-4. Configure the required database tables, functions and RLS policies.
-5. Create a private Storage bucket named `trustvault-documents`.
-6. Add the Supabase Project URL and Publishable Key to `script.js`.
-7. Open `index.html` using VS Code Live Server.
+1. Clone the repository:
 
+   ```bash
+   git clone https://github.com/udaykumarj64-lang/TrustVault.git
+   ```
+
+2. Open the cloned project folder in Visual Studio Code.
+
+3. Create a new project in Supabase.
+
+4. Configure the required database tables, functions, triggers, and Row Level Security (RLS) policies.
+
+5. Create a private Supabase Storage bucket named `trustvault-documents`.
+
+6. Open `script.js` and configure your Supabase project credentials:
+
+   ```javascript
+   const SUPABASE_URL = "https://lkgwzavjyfqgylpparhe.supabase.co";
+   const SUPABASE_KEY = "sb_publishable_SRROVwa_Wemf5wLDncg61w_dzCJV_xb";
+   ```
+
+7. Make sure `index.html` loads the Supabase JavaScript library and the application JavaScript file in the correct order.
+
+8. Open `index.html` using the VS Code Live Server extension.
+
+9. Register an account or sign in to access the TrustVault dashboard.
+
+## Demo Accounts
+
+TrustVault supports three user roles:
+
+| Role | Access |
+|---|---|
+| Admin | Administrative features and activity monitoring |
+| Owner | Manage owned documents and sharing permissions |
+| Viewer | Access documents shared with them |
+
+Separate Admin, Owner, and Viewer accounts have been created and login-tested.
+
+For security, demo email addresses and passwords should be shared with evaluators through a secure channel rather than committed to this public repository.
+
+## API Documentation
+
+TrustVault uses the Supabase JavaScript Client to communicate with Supabase Authentication, PostgreSQL Database, and private Storage. Database and Storage access are protected by Row Level Security (RLS) and configured policies.
+
+### 1. Authentication
+
+| Operation | Supabase method | Description |
+|---|---|---|
+| Register | `auth.signUp()` | Creates a new user account |
+| Login | `auth.signInWithPassword()` | Authenticates a user |
+| Logout | `auth.signOut()` | Ends the current session |
+| Get Session | `auth.getSession()` | Retrieves the current session |
+
+### 2. Database Operations
+
+| Resource | Operation | Description |
+|---|---|---|
+| `profiles` | SELECT | Retrieves the logged-in user's profile and role |
+| `documents` | SELECT | Retrieves documents accessible to the user |
+| `documents` | INSERT | Creates a document record |
+| `documents` | UPDATE | Updates document information when authorized |
+| `documents` | DELETE | Deletes a document record when authorized |
+| `audit_logs` | SELECT | Retrieves activity records when authorized |
+
+### 3. Storage Operations
+
+**Bucket:** `trustvault-documents` (Private)
+
+| Operation | Supabase method | Description |
+|---|---|---|
+| Upload | `storage.from().upload()` | Uploads an authorized document |
+| Download | `storage.from().download()` | Downloads a document after permission checks |
+| Delete | `storage.from().remove()` | Removes an authorized document |
+
+### 4. Custom RPC Function
+
+| Function | Description |
+|---|---|
+| `trustvault_log_download(p_document_id)` | Checks document download permission and records the download attempt |
+
+### 5. Role-Based Access
+
+- **Admin:** Administrative access as permitted by database policies.
+- **Owner:** Manages owned documents and sharing permissions as authorized.
+
+
+### Prerequisites
+- Visual Studio Code
+- A modern web browser
+- Supabase account
+- VS Code Live Server extension
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/udaykumarj64-lang/TrustVault.git
+   ```
+
+2. Open the cloned project folder in Visual Studio Code.
+
+3. Create a new project in Supabase.
+
+4. Configure the required database tables, functions, triggers, and Row Level Security (RLS) policies.
+
+5. Create a private Supabase Storage bucket named `trustvault-documents`.
+
+6. Open `script.js` and configure your Supabase project credentials:
+
+   ```javascript
+   const SUPABASE_URL = "https://lkgwzavjyfqgylpparhe.supabase.co";
+   const SUPABASE_KEY = "sb_publishable_SRROVwa_Wemf5wLDncg61w_dzCJV_xb";
+   ```
+
+7. Make sure `index.html` loads the Supabase JavaScript library and the application JavaScript file in the correct order.
+
+8. Open `index.html` using the VS Code Live Server extension.
+
+9. Register an account or sign in to access the TrustVault dashboard.
+
+### Security Note
+
+- Use only the Supabase publishable key in frontend code.
+- Never expose the Supabase service-role key.
+- Keep the Storage bucket private.
+- Ensure RLS and Storage policies are configured before using the application.
 ## Security
 
 - Only the Supabase Publishable Key is used in frontend code.
@@ -76,7 +196,7 @@ The tests use the pgTAP extension and check:
 
 Run the SQL script in the Supabase SQL Editor.
 
-**Current test result: 5/5 tested scenarios passed.**
+**Current test status:** The five pgTAP scenarios are included in the test script. The latest execution did not provide a complete, independently verified test summary. Therefore, the 5/5 pass result is not claimed yet.
 
 ## Production Security Checklist
 
@@ -93,3 +213,23 @@ Run the SQL script in the Supabase SQL Editor.
 ## Security Disclaimer
 
 The current automated tests cover selected authorization scenarios only. Passing these tests does not establish production-level security. Additional testing and security improvements are required.
+## Security Testing
+
+TrustVault underwent manual security testing in both the local development environment and the deployed Vercel application.
+
+### Tests Performed
+- Verified Owner-to-Viewer document sharing.
+- Verified permission revocation.
+- Confirmed revoked documents disappear from the Viewer's Shared With Me section.
+- Tested unauthorized document update and deletion attempts.
+- Verified document ownership and original data remain unchanged.
+- Verified Admin access to documents and Activity Logs.
+- Checked permission grant, revoke, upload and download audit events.
+- Verified invalid `.exe` uploads are blocked.
+- Verified valid PDF uploads work and persist after refresh.
+- Verified files exceeding the 10 MB limit are blocked.
+
+### Test Result
+All listed manual test scenarios passed in the tested environments.
+
+Note: These are manual functional security checks, not an independent penetration test or formal security audit. Further automated testing and independent review are recommended.
